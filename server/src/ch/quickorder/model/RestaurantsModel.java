@@ -55,13 +55,10 @@ public class RestaurantsModel extends CpsBasedModel {
         return getRestaurantByQuery(query);
     }
 
+    // Must be called within an transaction context!
     public int getTicketNumber(String id) {
 
         try {
-            // Begin transaction
-            CPSBeginTransactionRequest beginTransactionRequest = new CPSBeginTransactionRequest();
-            cpsConnection.sendRequest(beginTransactionRequest);
-
             // Get restaurant
             Restaurant restaurant = getRestaurantById(id);
 
@@ -70,7 +67,7 @@ public class RestaurantsModel extends CpsBasedModel {
             }
 
             // Increase order count
-            restaurant.setOrderCount(restaurant.getOrderCount());
+            restaurant.setOrderCount(restaurant.getOrderCount() + 1);
 
             // Save data back to the DB
             Document doc = documentBuilder.newDocument();
@@ -78,10 +75,6 @@ public class RestaurantsModel extends CpsBasedModel {
 
             CPSPartialReplaceRequest partialReplaceRequest = new CPSPartialReplaceRequest(doc);
             cpsConnection.sendRequest(partialReplaceRequest);
-
-            // End transaction
-            CPSCommitTransactionRequest commitTransactionRequest = new CPSCommitTransactionRequest();
-            cpsConnection.sendRequest(commitTransactionRequest);
 
             // Return the ticker number
             return restaurant.getOrderCount() % 100;

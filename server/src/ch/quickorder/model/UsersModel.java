@@ -48,6 +48,7 @@ public class UsersModel extends CpsBasedModel {
         return getFirstOrNull(getUsersWithQuery("<id>" + id + "</id>"));
     }
 
+    // Must be called within an transaction context!
     public boolean addOrderToUser( String id, String orderId) {
 
         try {

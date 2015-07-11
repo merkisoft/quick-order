@@ -69,16 +69,16 @@ public class OrdersModel extends CpsBasedModel {
 
     public Order createOrder(String userId, Order order) {
 
-        // Fill in missing order details
-        order.setId(UUID.randomUUID().toString());
-        order.setTimestamp(System.currentTimeMillis());
-        order.setStatus(OrderStatus.Ordered.name());
-        order.setTicketNumber(RestaurantsModel.getInstance().getTicketNumber(order.getRestaurant()));
-
         try {
             // Begin transaction
             CPSBeginTransactionRequest beginTransactionRequest = new CPSBeginTransactionRequest();
             cpsConnection.sendRequest(beginTransactionRequest);
+
+            // Fill in missing order details
+            order.setId(UUID.randomUUID().toString());
+            order.setTimestamp(System.currentTimeMillis());
+            order.setStatus(OrderStatus.Ordered.name());
+            order.setTicketNumber(RestaurantsModel.getInstance().getTicketNumber(order.getRestaurant()));
 
             // Insert order
             {
