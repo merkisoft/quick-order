@@ -18,13 +18,15 @@
           <div xui-if="myAccordion == p.guiId" ui-scope-context='p.guiId'>
             <div class="panel-body">
               <div class="row" ng-repeat="i in p.products">
-                <div class="col-md-8" ng-click="addItem(i)">
+                <div class="col-md-8 col-lg-8 col-xs-5 col-sm-8" ng-click="addItem(i)">
                   {{i.name}}
                 </div>
-                <div class="col-md-2">
-                  {{i.size}}
+                <div class="col-md-2 col-lg-2 col-xs-5   col-sm-2" style="font-size:2em">
+                  <span ng-if="i.size>0"><span ng-click="i.size=i.size-1" class="fa fa-minus"></span>
+                    {{i.size}}
+                    <span ng-click="i.size=i.size+1" class="fa fa-plus"></span></span>
                 </div>
-                <div class="col-md-2" style="text-align:right">
+                <div class="col-md-1 col-lg-1 col-xs-1 col-sm-1" style="text-align:right">
                   {{i.price}}
                 </div>
 
@@ -34,7 +36,6 @@
           </div>
         </div>
       </div>
-
 
     </div>
   </div>

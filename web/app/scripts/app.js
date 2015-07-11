@@ -20,7 +20,7 @@ angular
     'mobile-angular-ui.core'
   ])
 
-  .config(function ($routeProvider, RestangularProvider) {
+  .config(function ($routeProvider, RestangularProvider, $httpProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -36,6 +36,9 @@ angular
         redirectTo: '/'
       });
 
+    $httpProvider.defaults.headers.get = {
+      'x-userid' : 'blop'
+    };
 
     RestangularProvider.setBaseUrl('http://192.168.1.2:8080/rest');
     // RestangularProvider.setExtraFields(['name']);
@@ -58,12 +61,14 @@ angular
 
 
   .factory('products', ['Restangular', function (Restangular) {
-    var products = [];
+    var products = [{"guiId":6,"name":"Salads","position":1,"products":[{"id":"1","restaurant":"2","name":"Green salad","category":"1:Salads","price":5}]},{"guiId":4,"name":"Sandwiches","position":2,"products":[{"id":"6","restaurant":"2","name":"Tuna sandwich","category":"2:Sandwiches","price":7}]},{"guiId":2,"name":"Soft drinks","position":3,"products":[{"id":"8","restaurant":"2","name":"Orange lemonade","category":"3:Soft drinks","price":4}]},{"guiId":0,"name":"Desserts","position":4,"products":[{"id":"10","restaurant":"2","name":"Muffin","category":"4:Desserts","price":3.7}]}];
 
     function load() {
       Restangular.all('/restaurants/2/products/groups').getList()
         .then(function (data) {
-          angular.copy(data, products);
+          if (data.length>0) {
+            angular.copy(data, products);
+          }
         });
 
     }
@@ -81,8 +86,8 @@ angular
 
     function addItem(item) {
       var found = false;
-      angular.forEach(currentOrder, function(val, i) {
-        if (val.id == item.id) {
+      angular.forEach(currentOrder, function(val) {
+        if (val.id === item.id) {
           val.size++;
           found = true;
         }
@@ -98,12 +103,14 @@ angular
     function submit() {
       Restangular.all('/order').post(currentOrder)
         .then(function(data) {
+          data = data;
           // $location.path("/anmeldung");
         });
 
     }
 
     return {
+      submit: submit,
       addItem: addItem,
       currentOrder: currentOrder
     };
