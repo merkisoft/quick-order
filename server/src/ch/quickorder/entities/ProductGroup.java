@@ -10,12 +10,14 @@ public class ProductGroup {
     private List<Product> products = new ArrayList<>();
 
     public ProductGroup(String category) {
-        if (category.contains( ":")) {
-            name = category.split( ":")[ 1];
-            position = Integer.parseInt( category.split( ":")[0]);
-        } else {
+        String splitCategory[] = category.split(":");
+
+        if (splitCategory.length != 2) {
             name = category;
             position = 0;
+        } else {
+            position = Integer.parseInt( splitCategory[0]);
+            name = splitCategory[ 1];
         }
     }
 

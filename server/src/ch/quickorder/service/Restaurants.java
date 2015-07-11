@@ -6,10 +6,7 @@ import ch.quickorder.entities.Restaurant;
 import ch.quickorder.model.ProductsModel;
 import ch.quickorder.model.RestaurantsModel;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -27,7 +24,7 @@ public class Restaurants {
     @RequestMapping(value = "/{restaurant}/products/groups", method = RequestMethod.GET)
     public
     @ResponseBody
-    Collection< ProductGroup> getProductGroupsForRestaurant(@PathVariable String restaurant) {
+    Collection< ProductGroup> getProductGroupsForRestaurant(@RequestParam(value="locale", defaultValue="en") @PathVariable String restaurant, String locale) {
         return ProductsModel.getInstance().getProductGroupsForRestaurant(restaurant);
     }
 

@@ -17,7 +17,7 @@ public class Users {
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public
     @ResponseBody
-    Collection<User> getProducts() {
+    Collection<User> getUsers() {
         return UsersModel.getInstance().getUsers();
     }
 
@@ -27,6 +27,4 @@ public class Users {
     User getUserById(@PathVariable String id) {
         return UsersModel.getInstance().getUserById(id);
     }
-
-
 }

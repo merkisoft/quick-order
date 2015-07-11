@@ -1,13 +1,12 @@
 package ch.quickorder.entities;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @XmlRootElement(name="document")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Order {
 
     private String id;
