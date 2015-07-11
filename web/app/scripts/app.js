@@ -98,9 +98,14 @@ angular
   .factory('restaurant', ['Restangular', function (Restangular) {
     var products = [];
     var restaurant = {};
+    var tableId = 0;
 
-    function load(restaurantId, tableId, callback) {
-      var restaurant = Restangular.one('/restaurants/id', restaurantId).get()
+    function load(restaurantId, tid, callback) {
+
+      if (!restaurantId) { return; }
+
+      tableId = tid;
+      Restangular.one('/restaurants/id', restaurantId).get()
         .then(function (d) {
           angular.copy(d, restaurant);
 
