@@ -3,6 +3,7 @@ package ch.quickorder.entities;
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @XmlRootElement(name="document")
@@ -10,12 +11,14 @@ import java.util.List;
 public class Order {
 
     private String id;
-
     private String restaurant;
+    private String ticketNumber;
+    private String status;
+    private long timestamp;
 
-    @XmlElementWrapper(name="products")
-    @XmlElement(name = "id", type = String.class)
-    private Collection< String> products = new ArrayList<>();
+    @XmlElementWrapper(name="items")
+    @XmlElement(name = "item", type = OrderItem.class)
+    private Collection< OrderItem> items = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -33,11 +36,35 @@ public class Order {
         this.restaurant = restaurant;
     }
 
-    public Collection<String> getProducts() {
-        return products;
+    public Collection<OrderItem> getItems() {
+        return items;
     }
 
-    public void setProducts(Collection<String> products) {
-        this.products = products;
+    public void setItems(Collection<OrderItem> items) {
+        this.items = items;
+    }
+
+    public String getTicketNumber() {
+        return ticketNumber;
+    }
+
+    public void setTicketNumber(String ticketNumber) {
+        this.ticketNumber = ticketNumber;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

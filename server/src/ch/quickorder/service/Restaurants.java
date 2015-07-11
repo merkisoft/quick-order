@@ -24,7 +24,8 @@ public class Restaurants {
     @RequestMapping(value = "/{restaurant}/products/groups", method = RequestMethod.GET)
     public
     @ResponseBody
-    Collection< ProductGroup> getProductGroupsForRestaurant(@RequestParam(value="locale", defaultValue="en") @PathVariable String restaurant, String locale) {
+    Collection< ProductGroup> getProductGroupsForRestaurant(@RequestParam(value="locale", defaultValue="en") String locale,
+                                                            @PathVariable String restaurant) {
         return ProductsModel.getInstance().getProductGroupsForRestaurant(restaurant);
     }
 

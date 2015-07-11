@@ -3,10 +3,7 @@ package ch.quickorder.service;
 import ch.quickorder.entities.User;
 import ch.quickorder.model.UsersModel;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -17,14 +14,15 @@ public class Users {
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public
     @ResponseBody
-    Collection<User> getUsers() {
+    Collection<User> getUsers(@RequestHeader("x-qo-userid") String userId) {
         return UsersModel.getInstance().getUsers();
     }
 
     @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
-    User getUserById(@PathVariable String id) {
+    User getUserById(@PathVariable String id,
+                     @RequestHeader("x-qo-userid") String userId) {
         return UsersModel.getInstance().getUserById(id);
     }
 }

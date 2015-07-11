@@ -40,7 +40,7 @@ angular
       'x-userid' : 'blop'
     };
 
-    RestangularProvider.setBaseUrl('http://192.168.1.2:8080/rest');
+    RestangularProvider.setBaseUrl('http://192.168.1.47:8080/rest');
     // RestangularProvider.setExtraFields(['name']);
     RestangularProvider.setResponseExtractor(function (response) {
       /* if (response.error) {
@@ -61,7 +61,7 @@ angular
 
 
   .factory('products', ['Restangular', function (Restangular) {
-    var products = [{"guiId":6,"name":"Salads","position":1,"products":[{"id":"1","restaurant":"2","name":"Green salad","category":"1:Salads","price":5}]},{"guiId":4,"name":"Sandwiches","position":2,"products":[{"id":"6","restaurant":"2","name":"Tuna sandwich","category":"2:Sandwiches","price":7}]},{"guiId":2,"name":"Soft drinks","position":3,"products":[{"id":"8","restaurant":"2","name":"Orange lemonade","category":"3:Soft drinks","price":4}]},{"guiId":0,"name":"Desserts","position":4,"products":[{"id":"10","restaurant":"2","name":"Muffin","category":"4:Desserts","price":3.7}]}];
+    var products = [];//[{"guiId":6,"name":"Salads","position":1,"products":[{"id":"1","restaurant":"2","name":"Green salad","category":"1:Salads","price":5}]},{"guiId":4,"name":"Sandwiches","position":2,"products":[{"id":"6","restaurant":"2","name":"Tuna sandwich","category":"2:Sandwiches","price":7}]},{"guiId":2,"name":"Soft drinks","position":3,"products":[{"id":"8","restaurant":"2","name":"Orange lemonade","category":"3:Soft drinks","price":4}]},{"guiId":0,"name":"Desserts","position":4,"products":[{"id":"10","restaurant":"2","name":"Muffin","category":"4:Desserts","price":3.7}]}];
 
     function load() {
       Restangular.all('/restaurants/2/products/groups').getList()
