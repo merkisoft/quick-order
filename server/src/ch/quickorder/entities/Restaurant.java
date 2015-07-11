@@ -10,7 +10,7 @@ public class Restaurant {
     private String name;
     private String city;
 
-    private int orderCount;
+    private Integer orderCount;
 
     private String latitude;
     private String longitude;
@@ -39,11 +39,11 @@ public class Restaurant {
         this.city = city;
     }
 
-    public int getOrderCount() {
+    public Integer getOrderCount() {
         return orderCount;
     }
 
-    public void setOrderCount(int orderCount) {
+    public void setOrderCount(Integer orderCount) {
         this.orderCount = orderCount;
     }
 

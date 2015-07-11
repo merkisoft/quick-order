@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OrderItem {
     private String productId;
-    private int count;
+    private Integer count;
 
     public String getProductId() {
         return productId;
@@ -18,11 +18,11 @@ public class OrderItem {
         this.productId = productId;
     }
 
-    public int getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 }

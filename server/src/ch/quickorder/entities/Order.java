@@ -12,10 +12,10 @@ public class Order {
 
     private String id;
     private String restaurant;
-    private int ticketNumber;
+    private Integer ticketNumber;
     private String status;
-    private long timestamp;
-    private int table;
+    private Long timestamp;
+    private Integer table;
 
     @XmlElementWrapper(name="items")
     @XmlElement(name = "item", type = OrderItem.class)
@@ -37,19 +37,11 @@ public class Order {
         this.restaurant = restaurant;
     }
 
-    public Collection<OrderItem> getItems() {
-        return items;
-    }
-
-    public void setItems(Collection<OrderItem> items) {
-        this.items = items;
-    }
-
-    public int getTicketNumber() {
+    public Integer getTicketNumber() {
         return ticketNumber;
     }
 
-    public void setTicketNumber(int ticketNumber) {
+    public void setTicketNumber(Integer ticketNumber) {
         this.ticketNumber = ticketNumber;
     }
 
@@ -61,19 +53,27 @@ public class Order {
         this.status = status;
     }
 
-    public long getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 
-    public int getTable() {
+    public Integer getTable() {
         return table;
     }
 
-    public void setTable(int table) {
+    public void setTable(Integer table) {
         this.table = table;
+    }
+
+    public Collection<OrderItem> getItems() {
+        return items;
+    }
+
+    public void setItems(Collection<OrderItem> items) {
+        this.items = items;
     }
 }

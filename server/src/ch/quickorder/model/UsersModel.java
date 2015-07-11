@@ -1,6 +1,5 @@
 package ch.quickorder.model;
 
-import ch.quickorder.entities.Product;
 import ch.quickorder.entities.User;
 import com.clusterpoint.api.request.CPSPartialReplaceRequest;
 import com.clusterpoint.api.request.CPSSearchRequest;
@@ -13,7 +12,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
 import java.util.*;
 
 public class UsersModel extends CpsBasedModel {
@@ -48,18 +46,25 @@ public class UsersModel extends CpsBasedModel {
         return getFirstOrNull(getUsersWithQuery("<id>" + id + "</id>"));
     }
 
+    public User getUserForOrder( String orderId) {
+
+        String query = "<orders><id>" + orderId + "</id></orders>";
+
+        return getFirstOrNull(getUsersWithQuery(query));
+    }
+
     // Must be called within an transaction context!
     public boolean addOrderToUser( String id, String orderId) {
 
         try {
             User user = getUserById(id);
-            user.getOrders().add( orderId);
+            user.getOrders().add(orderId);
 
             Document doc = documentBuilder.newDocument();
             userMarshaller.marshal(user, doc);
 
-            CPSPartialReplaceRequest partialupdateRequest = new CPSPartialReplaceRequest(doc);
-            CPSModifyResponse updateResponse = (CPSModifyResponse) cpsConnection.sendRequest(partialupdateRequest);
+            CPSPartialReplaceRequest partialReplaceRequest = new CPSPartialReplaceRequest(doc);
+            CPSModifyResponse updateResponse = (CPSModifyResponse) cpsConnection.sendRequest(partialReplaceRequest);
         } catch (Exception e) {
             return false;
         }
@@ -85,12 +90,8 @@ public class UsersModel extends CpsBasedModel {
                 List<Element> results = searchResponse.getDocuments();
                 Iterator<Element> it = results.iterator();
 
-                JAXBContext context = JAXBContext.newInstance(User.class);
-                Unmarshaller unmarshaller = context.createUnmarshaller();
-                unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
-
                 while (it.hasNext()) {
-                    User user = (User) unmarshaller.unmarshal(it.next());
+                    User user = (User) userUnmarshaller.unmarshal(it.next());
                     userList.add(user);
                 }
             }
