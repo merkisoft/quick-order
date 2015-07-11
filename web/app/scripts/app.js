@@ -17,10 +17,11 @@ angular
     'ngSanitize',
     'ngTouch',
     'restangular',
-    'mobile-angular-ui.core'
+    'mobile-angular-ui'
   ])
 
   .config(function ($routeProvider, RestangularProvider, $httpProvider) {
+
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -189,4 +190,5 @@ angular
 
     // return Restangular.service('order');
   }])
+
 ;

@@ -10,7 +10,7 @@
     "angular-route": "^1.3.0",
     "angular-sanitize": "^1.3.0",
     "angular-touch": "^1.3.0",
-    "mobile-angular-ui": "1.2.0-beta.6",
+    "mobile-angular-ui": "1.2.0-beta.11",
     "restangular": "^1.5.1"
   },
   "devDependencies": {

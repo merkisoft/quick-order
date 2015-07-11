@@ -8,7 +8,9 @@
  * Controller of the webApp
  */
 angular.module('webApp')
-  .controller('MenuCtrl', ['restaurant', '$scope', 'order', '$location', function (restaurant, $scope, order, $location) {
+  .controller('MenuCtrl', ['restaurant', '$scope', '$rootScope', 'order', '$location', function (restaurant, $scope, $rootScope, order, $location) {
+
+ //   $rootScope.Ui.turnOn('uiSidebarLeft');
 
     $scope.products = restaurant.products;
     $scope.currentOrder = order.currentOrder;
