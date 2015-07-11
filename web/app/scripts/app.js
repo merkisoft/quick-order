@@ -57,10 +57,10 @@ angular
       });
 
     $httpProvider.defaults.headers.get = {
-      'x-userid' : 'blop'
+      'x-qo-userid' : 'blop'
     };
 
-    RestangularProvider.setBaseUrl('http://192.168.1.47:8080/rest');
+    RestangularProvider.setBaseUrl('http://'+document.location.hostname+':8080/rest');
     // RestangularProvider.setExtraFields(['name']);
     RestangularProvider.setResponseExtractor(function (response) {
       /* if (response.error) {
@@ -139,7 +139,7 @@ angular
 
       var order = { restaurantId: 1111, items: items };
 
-      Restangular.all('/order').post(order)
+      Restangular.all('/orders/create').post(order)
         .then(function(data) {
           ticketNumber = data.ticketNumber;
           // $location.path("/anmeldung");
