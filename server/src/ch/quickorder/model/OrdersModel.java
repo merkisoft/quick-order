@@ -1,6 +1,7 @@
 package ch.quickorder.model;
 
 import ch.quickorder.entities.Order;
+import ch.quickorder.entities.User;
 import ch.quickorder.util.OrderStatus;
 import com.clusterpoint.api.request.*;
 import com.clusterpoint.api.response.CPSSearchResponse;
@@ -44,11 +45,38 @@ public class OrdersModel extends CpsBasedModel {
         return getFirstOrNull(getOrdersWithQuery("<id>" + id + "</id>"));
     }
 
-    public boolean deleteOrderById(String id) {
+    public boolean deleteOrderById(String id, String userId) {
 
         try {
+            // Begin transaction
+            CPSBeginTransactionRequest beginTransactionRequest = new CPSBeginTransactionRequest();
+            cpsConnection.sendRequest(beginTransactionRequest);
+
+            // Find and update user
+            User user = UsersModel.getInstance().getUserForOrder( id);
+
+            if (user == null || (user.getId().equals( userId) == false)) {
+                return false;
+            }
+
+            Iterator< String> orderIterator = user.getOrders().iterator();
+
+            while (orderIterator.hasNext()) {
+                String orderId = orderIterator.next();
+
+                if (orderId.equals(id)) {
+                    orderIterator.remove();
+                    break;
+                }
+            }
+
+            // Delete order
             CPSDeleteRequest deleteRequest = new CPSDeleteRequest(id);
             cpsConnection.sendRequest(deleteRequest);
+
+            // End transaction
+            CPSCommitTransactionRequest commitTransactionRequest = new CPSCommitTransactionRequest();
+            cpsConnection.sendRequest(commitTransactionRequest);
         } catch (Exception e) {
             return false;
         }

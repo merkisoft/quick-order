@@ -30,7 +30,7 @@ public class Orders {
     @ResponseBody
     boolean deleteOrderById(@PathVariable String id,
                             @RequestHeader("x-qo-userid") String userId) {
-        return OrdersModel.getInstance().deleteOrderById(id);
+        return OrdersModel.getInstance().deleteOrderById(id, userId);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
