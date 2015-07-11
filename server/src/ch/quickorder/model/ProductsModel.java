@@ -90,7 +90,8 @@ public class ProductsModel extends CpsBasedModel {
 
         for (Product product : products) {
 
-            ProductGroup productGroup = productGroupMap.get( product.getCategory());
+            ProductGroup productGroup = new ProductGroup(product.getCategory());
+            productGroup = productGroupMap.get( productGroup.getName());
 
             if (productGroup == null) {
                 productGroup = new ProductGroup( product.getCategory());
