@@ -8,12 +8,12 @@
  * Controller of the webApp
  */
 angular.module('webApp')
-  .controller('MenuCtrl', ['products', '$scope', 'order', '$location', '$routeParams', function (products, $scope, order, $location, $routeParams) {
+  .controller('MenuCtrl', ['restaurant', '$scope', 'order', '$location', function (restaurant, $scope, order, $location) {
 
-    $scope.products = products.products;
+    $scope.products = restaurant.products;
     $scope.currentOrder = order.currentOrder;
     $scope.ticketNumber = order.ticketNumber;
-    $scope.restaurantName = "Vivendi" + $routeParams.rid;
+    $scope.restaurant = restaurant.restaurant;
 
     $scope.getTotal = function() {
       return order.getTotal();
@@ -33,6 +33,15 @@ angular.module('webApp')
       order.submit();
       $location.path("/order/paid");
     };
+
+  }])
+  .controller('MenuLoadingCtrl', ['$scope', 'restaurant', '$location', '$routeParams', function ($scope, restaurant, $location, $routeParams) {
+    var restaurantId = $routeParams.rid;
+    var tableId = $routeParams.tid;
+
+    restaurant.load(restaurantId, tableId, function() {
+      $location.path('/menu');
+    });
 
   }])
 ;

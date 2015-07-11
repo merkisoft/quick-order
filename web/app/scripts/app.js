@@ -38,6 +38,11 @@ angular
         controllerAs: 'about'
       })
       .when('/restaurant/:rid/table/:tid', {
+        templateUrl: 'views/menu-loading.html',
+        controller: 'MenuLoadingCtrl',
+        controllerAs: 'menuCtrl'
+      })
+      .when('/menu', {
         templateUrl: 'views/menu.html',
         controller: 'MenuCtrl',
         controllerAs: 'menuCtrl'
@@ -52,15 +57,20 @@ angular
         controller: 'MenuCtrl',
         controllerAs: 'menuCtrl'
       })
+      .when('/waiter', {
+        templateUrl: 'views/waiter.html',
+        controller: 'MenuCtrl',
+        controllerAs: 'menuCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
 
     $httpProvider.defaults.headers.get = {
-      'x-qo-userid' : 'blop'
+      'x-qo-userid': 'blop'
     };
 
-    RestangularProvider.setBaseUrl('http://'+document.location.hostname+':8080/rest');
+    RestangularProvider.setBaseUrl('http://' + document.location.hostname + ':8080/rest');
     // RestangularProvider.setExtraFields(['name']);
     RestangularProvider.setResponseExtractor(function (response) {
       /* if (response.error) {
@@ -72,36 +82,48 @@ angular
       return response;
     });
 
-    RestangularProvider.setDefaultHttpFields({cache:false});
+    RestangularProvider.setDefaultHttpFields({cache: false});
 
     RestangularProvider.setRequestSuffix('');
 
 
   })
 
+  .filter('itemCount', function () {
+    return function (input) {
+      return input.count > 0;
+    };
+  })
 
-  .factory('products', ['Restangular', function (Restangular) {
-    var products = [];//[{"guiId":6,"name":"Salads","position":1,"products":[{"id":"1","restaurant":"2","name":"Green salad","category":"1:Salads","price":5}]},{"guiId":4,"name":"Sandwiches","position":2,"products":[{"id":"6","restaurant":"2","name":"Tuna sandwich","category":"2:Sandwiches","price":7}]},{"guiId":2,"name":"Soft drinks","position":3,"products":[{"id":"8","restaurant":"2","name":"Orange lemonade","category":"3:Soft drinks","price":4}]},{"guiId":0,"name":"Desserts","position":4,"products":[{"id":"10","restaurant":"2","name":"Muffin","category":"4:Desserts","price":3.7}]}];
+  .factory('restaurant', ['Restangular', function (Restangular) {
+    var products = [];
+    var restaurant = {};
 
-    function load() {
-      Restangular.all('/restaurants/2/products/groups').getList()
-        .then(function (data) {
-          if (data.length>0) {
-            angular.copy(data, products);
-          }
+    function load(restaurantId, tableId, callback) {
+      var restaurant = Restangular.one('/restaurants/id', restaurantId).get()
+        .then(function (d) {
+          angular.copy(d, restaurant);
+
+          Restangular.all('/restaurants/' + restaurantId + '/products/groups').getList()
+            .then(function (data) {
+              callback();
+              if (data.length > 0) {
+                angular.copy(data, products);
+              }
+            });
         });
 
     }
 
-    load();
-
     return {
-      products: products
+      restaurant: restaurant,
+      products: products,
+      load: load
     };
 
   }])
 
-  .factory('order', ['Restangular', function(Restangular) {
+  .factory('order', ['Restangular', function (Restangular) {
     var currentOrder = [];
     var ticketNumber = "";
 
@@ -116,7 +138,7 @@ angular
 
     function addItem(item) {
       var found = false;
-      angular.forEach(currentOrder, function(val) {
+      angular.forEach(currentOrder, function (val) {
         if (val.id === item.id) {
           val.count++;
           found = true;
@@ -132,15 +154,15 @@ angular
 
     function submit() {
 
-      var items=[];
+      var items = [];
       angular.forEach(currentOrder, function (val) {
         items.push({productId: val.id, count: val.count});
       });
 
-      var order = { restaurantId: 1111, items: items };
+      var order = {'restaurantId': "1", 'table': 11, 'items': items};
 
       Restangular.all('/orders/create').post(order)
-        .then(function(data) {
+        .then(function (data) {
           ticketNumber = data.ticketNumber;
           // $location.path("/anmeldung");
         });

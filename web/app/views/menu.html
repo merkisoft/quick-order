@@ -1,10 +1,5 @@
-<div ui-content-for="title">
-  <span>{{restaurant.name}}</span>
-</div>
-
-
 <div ui-content-for="bottom">
-  <div class="btn-group justified" ng-if="currentOrder.length>0">
+  <div class="btn-group justified" ng-if="getTotal()>0">
     <a class="btn" ng-click="verifyOrder()">Pay just {{getTotal() | number:2}} and order now</a>
   </div>
 </div>
@@ -21,14 +16,14 @@
           </div>
           <div xui-if="myAccordion == p.guiId" ui-scope-context='p.guiId'>
             <div class="panel-body">
-              <div class="row" ng-repeat="i in p.products">
-                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-6 " ng-click="addItem(i)">
+              <div class="row" ng-repeat="i in p.products" ng-click="addItem(i)">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-6 " >
                   {{i.name}}
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-3" style="text-align:right">
-                  <span ng-if="i.count>0"><span ng-click="i.count=i.count-1" class="fa fa-minus"></span>
+                  <span ng-if="i.count>0"><span ng-click="i.count=i.count-1; $event.stopPropagation()" class="fa fa-minus"></span>
                     {{i.count}}
-                    <span ng-click="i.count=i.count+1" class="fa fa-plus"></span></span>
+                    <span ng-click="i.count=i.count+1; $event.stopPropagation()" class="fa fa-plus"></span></span>
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-3" style="text-align:right">
                   {{i.priceFormatted}}

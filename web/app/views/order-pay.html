@@ -2,7 +2,6 @@
   <span>Submit Order</span>
 </div>
 
-
 <div ui-content-for="bottom">
   <div class="btn-group justified">
     <a class="btn" ng-click="payOrder()">Pay and get food!</a>
@@ -14,7 +13,7 @@
     <div class="panel">
       <div class="panel-body">
 
-        <div class="row" ng-repeat="i in currentOrder">
+        <div class="row" ng-repeat="i in filtered = (currentOrder|filter:itemCount(i)) ">
           <div class="col-lg-8 col-md-8 col-sm-8 col-xs-6">
             {{i.count}} x {{i.name}}
           </div>
