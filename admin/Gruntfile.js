@@ -17,10 +17,6 @@ module.exports = function (grunt) {
     useminPrepare: 'grunt-usemin'
   });
 
-  require('jit-grunt')(grunt, {
-    useminPrepare: 'grunt-usemin', ngtemplates: 'grunt-angular-templates', cdnify: 'grunt-google-cdn'
-  });
-
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
@@ -321,7 +317,7 @@ module.exports = function (grunt) {
     ngtemplates: {
       dist: {
         options: {
-          module: 'webApp',
+          module: 'adminApp',
           htmlmin: '<%= htmlmin.dist.options %>',
           usemin: 'scripts/scripts.js'
         },
