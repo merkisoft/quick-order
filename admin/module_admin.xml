@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_admin" default="compile.module.admin">
+  <dirname property="module.admin.basedir" file="${ant.file.module_admin}"/>
+  
+  <property name="module.jdk.home.admin" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.admin" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.admin" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.admin" value="-encoding UTF-8 -source 8 ${compiler.args}"/>
+  
+  <property name="admin.output.dir" value="${module.admin.basedir}/../out/production/admin"/>
+  <property name="admin.testoutput.dir" value="${module.admin.basedir}/../out/test/admin"/>
+  
+  <path id="admin.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="admin.module.production.classpath">
+    <path refid="${module.jdk.classpath.admin}"/>
+  </path>
+  
+  <path id="admin.runtime.production.module.classpath">
+    <pathelement location="${admin.output.dir}"/>
+  </path>
+  
+  <path id="admin.module.classpath">
+    <path refid="${module.jdk.classpath.admin}"/>
+    <pathelement location="${admin.output.dir}"/>
+  </path>
+  
+  <path id="admin.runtime.module.classpath">
+    <pathelement location="${admin.testoutput.dir}"/>
+    <pathelement location="${admin.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.admin">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.admin">
+    <patternset refid="excluded.from.module.admin"/>
+  </patternset>
+  
+  
+  <target name="compile.module.admin" depends="compile.module.admin.production,compile.module.admin.tests" description="Compile module admin"/>
+  
+  <target name="compile.module.admin.production" description="Compile module admin; production classes"/>
+  
+  <target name="compile.module.admin.tests" depends="compile.module.admin.production" description="compile module admin; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.admin" description="cleanup module">
+    <delete dir="${admin.output.dir}"/>
+    <delete dir="${admin.testoutput.dir}"/>
+  </target>
+</project>
