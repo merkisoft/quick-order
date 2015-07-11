@@ -72,8 +72,8 @@ public class ProductsModel extends CpsBasedModel {
             Document doc = documentBuilder.newDocument();
             productMarshaller.marshal(product, doc);
 
-            CPSPartialReplaceRequest partialupdateRequest = new CPSPartialReplaceRequest(doc);
-            CPSModifyResponse updateResponse = (CPSModifyResponse) cpsConnection.sendRequest(partialupdateRequest);
+            CPSPartialReplaceRequest partialReplaceRequest = new CPSPartialReplaceRequest(doc);
+            cpsConnection.sendRequest(partialReplaceRequest);
         } catch (Exception e) {
             return false;
         }
@@ -100,11 +100,8 @@ public class ProductsModel extends CpsBasedModel {
                 List<Element> results = searchResponse.getDocuments();
                 Iterator<Element> it = results.iterator();
 
-                JAXBContext context = JAXBContext.newInstance(Product.class);
-                Unmarshaller unmarshaller = context.createUnmarshaller();
-
                 while (it.hasNext()) {
-                    Product product = (Product) unmarshaller.unmarshal(it.next());
+                    Product product = (Product) productUnmarshaller.unmarshal(it.next());
                     productList.add( product);
                 }
             }

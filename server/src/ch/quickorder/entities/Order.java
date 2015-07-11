@@ -12,7 +12,7 @@ public class Order {
 
     private String id;
     private String restaurant;
-    private String ticketNumber;
+    private int ticketNumber;
     private String status;
     private long timestamp;
 
@@ -44,11 +44,11 @@ public class Order {
         this.items = items;
     }
 
-    public String getTicketNumber() {
+    public int getTicketNumber() {
         return ticketNumber;
     }
 
-    public void setTicketNumber(String ticketNumber) {
+    public void setTicketNumber(int ticketNumber) {
         this.ticketNumber = ticketNumber;
     }
 
