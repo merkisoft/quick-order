@@ -15,6 +15,7 @@ public class Order {
     private int ticketNumber;
     private String status;
     private long timestamp;
+    private int table;
 
     @XmlElementWrapper(name="items")
     @XmlElement(name = "item", type = OrderItem.class)
@@ -66,5 +67,13 @@ public class Order {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public int getTable() {
+        return table;
+    }
+
+    public void setTable(int table) {
+        this.table = table;
     }
 }
