@@ -33,5 +33,13 @@ public class Orders {
         return OrdersModel.getInstance().createOrder(user, order);
     }
 
+    @RequestMapping(value = "/id/{id}/markAsPaid", method = RequestMethod.PUT)
+    public
+    @ResponseBody
+    boolean markOrderAsPaid(@PathVariable String id,
+                          @RequestHeader("x-qo-userid") String user) {
+        return OrdersModel.getInstance().markOrderAsPaid(user, id);
+    }
+
 
 }
