@@ -28,28 +28,46 @@ public class ProductsModel {
 
     public ProductsModel() {
         try {
-            cpsConnection = ClusterPointConnection.getInstance().getConnection( "ProductsModel");
+            cpsConnection = ClusterPointConnection.getInstance().getConnection( "Products");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public List< Product> getProducts() {
+    public Collection<Product> getProducts() {
+
+        return getProductsWithQuery("*");
+    }
+
+    public Product getProductById( String id) {
+
+        return getFirstOrNull(getProductsWithQuery("<id>" + id + "</id>"));
+    }
+
+    public Collection<Product> getProductsByName(String name) {
+        return getProductsWithQuery( "<name>" + name + "</name>");
+    }
+
+    public List<Product> getProductsForRestaurant(String restaurant) {
+
+        String query = "<restaurant>" + restaurant + "</restaurant>";
+        return getProductsWithQuery(query);
+    }
+
+    private List<Product> getProductsWithQuery(String query) {
+
         List< Product> productList = new ArrayList<>();
 
         try {
-            Map<String, String> list = new HashMap<String, String>();
-            list.put("id", "yes");
-            list.put("name", "yes");
-            list.put("category", "yes");
-            list.put("restaurant", "yes");
-            list.put("price", "yes");
+            Map<String, String> attributesList = new HashMap<>();
+            attributesList.put("id", "yes");
+            attributesList.put("name", "yes");
+            attributesList.put("category", "yes");
+            attributesList.put("restaurant", "yes");
+            attributesList.put("price", "yes");
 
-            while (true) {
-                break;
-            }
-            CPSSearchRequest searchRequest = new CPSSearchRequest( "*", 0, 200, list);
-            CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(searchRequest);
+            CPSSearchRequest search_req = new  CPSSearchRequest(query, 0, 200, attributesList);
+            CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(search_req);
 
             if (searchResponse.getHits() > 0) {
                 List<Element> results = searchResponse.getDocuments();
@@ -68,15 +86,8 @@ public class ProductsModel {
             e.printStackTrace();
             return null;
         }
+
         return productList;
-    }
-
-    public Product getProductById( String Id) {
-        return null;
-    }
-
-    public List<Product> getProductsForRestaurant(String restaurant) {
-        return null;
     }
 
     public List<ProductGroup> getProductGroupsForRestaurant(String restaurant) {
@@ -97,6 +108,23 @@ public class ProductsModel {
             productGroup.addProduct( product);
         }
 
-        return new ArrayList<>( productGroupMap.values());
+        List< ProductGroup> sortedGroups = new ArrayList<>( productGroupMap.values());
+        sortedGroups.sort(new Comparator<ProductGroup>() {
+            @Override
+            public int compare(ProductGroup o1, ProductGroup o2) {
+                return o1.getPosition() - o2.getPosition();
+            }
+        });
+
+        return sortedGroups;
+    }
+
+    private Product getFirstOrNull(Collection<Product> products) {
+
+        if( products.isEmpty()) {
+            return null;
+        }
+
+        return products.iterator().next();
     }
 }

@@ -1,20 +1,34 @@
 package ch.quickorder.entities;
 
-import ch.quickorder.entities.Product;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductGroup {
 
     private String name;
-    private List<Product> products;
+    private int position;
+    private List<Product> products = new ArrayList<>();
 
-    public ProductGroup(String name) {
-        this.name = name;
+    public ProductGroup(String category) {
+        if (category.contains( ":")) {
+            name = category.split( ":")[ 1];
+            position = Integer.parseInt( category.split( ":")[0]);
+        } else {
+            name = category;
+            position = 0;
+        }
     }
 
     public void addProduct( Product product) {
         products.add( product);
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public String getName() {

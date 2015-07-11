@@ -12,29 +12,28 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller
-@RequestMapping(produces = "application/json")
+@RequestMapping(produces = "application/json", value = "/rest/products")
 public class Products {
 
-    @RequestMapping(value = "/products/all", method = RequestMethod.GET)
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
     public
     @ResponseBody
     Collection<Product> getProducts() {
         return ProductsModel.getInstance().getProducts();
     }
 
-    @RequestMapping(value = "/product/id/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
     public
     @ResponseBody
-    Product getProduct(@PathVariable String id) {
+    Product getProductById(@PathVariable String id) {
         return ProductsModel.getInstance().getProductById(id);
     }
 
-    @RequestMapping(value = "/product/{restaurant}/all", method = RequestMethod.GET)
+    @RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
     public
     @ResponseBody
-    List<Product> getProductsForRestaurant(@PathVariable String restaurant) {
-        return ProductsModel.getInstance().getProductsForRestaurant(restaurant);
+    Collection<Product> getProductByName(@PathVariable String name) {
+        return ProductsModel.getInstance().getProductsByName(name);
     }
-
 
 }
