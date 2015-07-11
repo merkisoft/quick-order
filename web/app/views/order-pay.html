@@ -10,20 +10,19 @@
 </div>
 
 <div class="scrollable">
-  <div class="scrollable-content">
-    <div>
+  <div class="scrollable-content panel-body">
+    <div class="panel">
+      <div class="panel-body">
 
-      <div class="row" ng-repeat="i in p.currentOrder">
-        <div class="col-md-8 col-lg-8 col-xs-5 col-sm-8">
-          {{i.name}}
-        </div>
-        <div class="col-md-2 col-lg-2 col-xs-5 col-sm-2">
-          {{i.count}}
-        </div>
-        <div class="col-md-1 col-lg-1 col-xs-1 col-sm-1">
-          {{i.priceFormatted}}
-        </div>
+        <div class="row" ng-repeat="i in currentOrder">
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-6">
+            {{i.count}} x {{i.name}}
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6" style="text-align:right">
+            {{i.priceFormatted}}
+          </div>
 
+        </div>
       </div>
     </div>
   </div>

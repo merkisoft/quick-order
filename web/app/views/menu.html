@@ -11,9 +11,7 @@
 
 <div class="scrollable">
   <div class="scrollable-content">
-      <div class="panel-group"
-           ui-state='myAccordion'
-        ui-default='1'>
+      <div class="panel-group" ui-state='myAccordion' ui-default='1'>
 
         <div class="panel panel-default" ng-repeat="p in products" style="font-size:2em">
           <div class="panel-heading" ui-set="{'myAccordion': p.guiId}">
@@ -24,16 +22,16 @@
           <div xui-if="myAccordion == p.guiId" ui-scope-context='p.guiId'>
             <div class="panel-body">
               <div class="row" ng-repeat="i in p.products">
-                <div class="col-md-8 col-lg-8 col-xs-8 col-sm-8" ng-click="addItem(i)">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-6 " ng-click="addItem(i)">
                   {{i.name}}
                 </div>
-                <div class="col-md-2 col-lg-2 col-xs-3 col-sm-2">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-3" style="text-align:right">
                   <span ng-if="i.count>0"><span ng-click="i.count=i.count-1" class="fa fa-minus"></span>
                     {{i.count}}
                     <span ng-click="i.count=i.count+1" class="fa fa-plus"></span></span>
                 </div>
-                <div class="col-md-1 col-lg-1 col-xs-1 col-sm-1" style="text-align:right">
-                  {{i.price}}
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-3" style="text-align:right">
+                  {{i.priceFormatted}}
                 </div>
 
               </div>

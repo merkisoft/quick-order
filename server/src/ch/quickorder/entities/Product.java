@@ -63,7 +63,7 @@ public class Product {
     }
 
     public String getPriceFormatted() {
-        DecimalFormat decimalFormat = new DecimalFormat( "¤ #,##0.00");
+        DecimalFormat decimalFormat = new DecimalFormat( "#,##0.00");
         return decimalFormat.format( price.doubleValue());
     }
 
