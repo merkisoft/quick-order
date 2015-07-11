@@ -96,16 +96,16 @@ public class ProductsModel extends CpsBasedModel {
             CPSSearchRequest search_req = new  CPSSearchRequest(query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(search_req);
 
-            if (searchResponse.getHits() > 0) {
-                List<Element> results = searchResponse.getDocuments();
-                Iterator<Element> it = results.iterator();
-
-                while (it.hasNext()) {
-                    Product product = (Product) productUnmarshaller.unmarshal(it.next());
-                    productList.add( product);
-                }
+            if ((searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
+                return null;
             }
 
+            Iterator<Element> iterator = searchResponse.getDocuments().iterator();
+
+            while (iterator.hasNext()) {
+                Product product = (Product) productUnmarshaller.unmarshal(iterator.next());
+                productList.add( product);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;

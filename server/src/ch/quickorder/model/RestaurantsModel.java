@@ -2,8 +2,6 @@ package ch.quickorder.model;
 
 import ch.quickorder.entities.Product;
 import ch.quickorder.entities.Restaurant;
-import com.clusterpoint.api.request.CPSBeginTransactionRequest;
-import com.clusterpoint.api.request.CPSCommitTransactionRequest;
 import com.clusterpoint.api.request.CPSPartialReplaceRequest;
 import com.clusterpoint.api.request.CPSSearchRequest;
 import com.clusterpoint.api.response.CPSSearchResponse;
@@ -41,7 +39,7 @@ public class RestaurantsModel extends CpsBasedModel {
     public Collection< Restaurant> getRestaurantsByName( String name) {
 
         String query = "<name>" + name + "</name>";
-        return getRestaurantByQuery( query);
+        return getRestaurantByQuery(query);
     }
 
     public Restaurant getRestaurantById( String id) {
@@ -98,17 +96,16 @@ public class RestaurantsModel extends CpsBasedModel {
             searchRequest = new CPSSearchRequest( query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(searchRequest);
 
-            if (searchResponse.getDocuments().isEmpty() == false) {
-
-                List<Element> results = searchResponse.getDocuments();
-                Iterator<Element> it = results.iterator();
-
-                while (it.hasNext()) {
-                    Restaurant restaurant = (Restaurant) restaurantUnmarshaller.unmarshal(it.next());
-                    restaurantList.add( restaurant);
-                }
+            if ((searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
+                return null;
             }
 
+            Iterator<Element> iterator = searchResponse.getDocuments().iterator();
+
+            while (iterator.hasNext()) {
+                Restaurant restaurant = (Restaurant) restaurantUnmarshaller.unmarshal(iterator.next());
+                restaurantList.add( restaurant);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

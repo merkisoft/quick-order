@@ -108,7 +108,7 @@ public class OrdersModel extends CpsBasedModel {
         try {
             // Begin transaction
             CPSBeginTransactionRequest beginTransactionRequest = new CPSBeginTransactionRequest();
-            cpsConnection.sendRequest(beginTransactionRequest);
+//            cpsConnection.sendRequest(beginTransactionRequest);
 
             // Fill in missing order details
             order.setId(UUID.randomUUID().toString());
@@ -130,8 +130,9 @@ public class OrdersModel extends CpsBasedModel {
 
             // End transaction
             CPSCommitTransactionRequest commitTransactionRequest = new CPSCommitTransactionRequest();
-            cpsConnection.sendRequest(commitTransactionRequest);
+//            cpsConnection.sendRequest(commitTransactionRequest);
         } catch (Exception e) {
+            System.err.println( "Unable to create order: " + e.getMessage());
             return null;
         }
 
@@ -154,16 +155,16 @@ public class OrdersModel extends CpsBasedModel {
             CPSSearchRequest search_req = new  CPSSearchRequest(query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(search_req);
 
-            if (searchResponse.getHits() > 0) {
-                List<Element> results = searchResponse.getDocuments();
-                Iterator<Element> it = results.iterator();
-
-                while (it.hasNext()) {
-                    Order order = (Order) orderUnmarshaller.unmarshal(it.next());
-                    orderList.add(order);
-                }
+            if ((searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
+                return null;
             }
 
+            Iterator<Element> iterator = searchResponse.getDocuments().iterator();
+
+            while (iterator.hasNext()) {
+                Order order = (Order) orderUnmarshaller.unmarshal(iterator.next());
+                orderList.add(order);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;

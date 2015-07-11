@@ -58,6 +58,11 @@ public class UsersModel extends CpsBasedModel {
 
         try {
             User user = getUserById(id);
+
+            if (user == null) {
+                return false;
+            }
+
             user.getOrders().add(orderId);
 
             Document doc = documentBuilder.newDocument();
@@ -86,16 +91,16 @@ public class UsersModel extends CpsBasedModel {
             CPSSearchRequest search_req = new  CPSSearchRequest(query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(search_req);
 
-            if (searchResponse.getHits() > 0) {
-                List<Element> results = searchResponse.getDocuments();
-                Iterator<Element> it = results.iterator();
-
-                while (it.hasNext()) {
-                    User user = (User) userUnmarshaller.unmarshal(it.next());
-                    userList.add(user);
-                }
+            if ((searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
+                return null;
             }
 
+            Iterator<Element> iterator = searchResponse.getDocuments().iterator();
+
+            while (iterator.hasNext()) {
+                User user = (User) userUnmarshaller.unmarshal(iterator.next());
+                userList.add(user);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;
