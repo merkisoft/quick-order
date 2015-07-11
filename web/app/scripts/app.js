@@ -159,7 +159,7 @@ angular
         items.push({productId: val.id, count: val.count});
       });
 
-      var order = {'restaurantId': "1", 'table': 11, 'items': items};
+      var order = {'restaurant': "1", 'table': 11, 'items': items};
 
       Restangular.all('/orders/create').post(order)
         .then(function (data) {
