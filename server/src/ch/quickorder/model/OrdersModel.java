@@ -108,7 +108,7 @@ public class OrdersModel extends CpsBasedModel {
         try {
             // Begin transaction
             CPSBeginTransactionRequest beginTransactionRequest = new CPSBeginTransactionRequest();
-            cpsConnection.sendRequest(beginTransactionRequest);
+//            cpsConnection.sendRequest(beginTransactionRequest);
 
             // Fill in missing order details
             order.setId(UUID.randomUUID().toString());
@@ -130,8 +130,9 @@ public class OrdersModel extends CpsBasedModel {
 
             // End transaction
             CPSCommitTransactionRequest commitTransactionRequest = new CPSCommitTransactionRequest();
-            cpsConnection.sendRequest(commitTransactionRequest);
+//            cpsConnection.sendRequest(commitTransactionRequest);
         } catch (Exception e) {
+            System.err.println( "Unable to create order: " + e.getMessage());
             return null;
         }
 

@@ -58,6 +58,11 @@ public class UsersModel extends CpsBasedModel {
 
         try {
             User user = getUserById(id);
+
+            if (user == null) {
+                return false;
+            }
+
             user.getOrders().add(orderId);
 
             Document doc = documentBuilder.newDocument();

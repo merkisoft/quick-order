@@ -67,7 +67,12 @@ angular
       });
 
     $httpProvider.defaults.headers.get = {
-      'x-qo-userid': 'blop'
+      'x-qo-userid': '2'
+    };
+
+    $httpProvider.defaults.headers.post = {
+      'x-qo-userid': '2',
+      'Content-Type': 'application/json'
     };
 
     RestangularProvider.setBaseUrl('http://' + document.location.hostname + ':8080/rest');
