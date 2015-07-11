@@ -2,8 +2,6 @@ package ch.quickorder.model;
 
 import ch.quickorder.entities.Product;
 import ch.quickorder.entities.ProductGroup;
-import ch.quickorder.util.ClusterPointConnection;
-import com.clusterpoint.api.CPSConnection;
 import com.clusterpoint.api.request.CPSSearchRequest;
 import com.clusterpoint.api.response.CPSSearchResponse;
 import org.w3c.dom.Element;
@@ -12,7 +10,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import java.util.*;
 
-public class ProductsModel {
+public class ProductsModel extends CpsBasedModel {
 
     private static ProductsModel instance;
 
@@ -24,14 +22,8 @@ public class ProductsModel {
         return instance;
     }
 
-    private CPSConnection cpsConnection;
-
     public ProductsModel() {
-        try {
-            cpsConnection = ClusterPointConnection.getInstance().getConnection( "Products");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        super("Products");
     }
 
     public Collection<Product> getProducts() {

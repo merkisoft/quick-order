@@ -2,8 +2,6 @@ package ch.quickorder.model;
 
 import ch.quickorder.entities.Product;
 import ch.quickorder.entities.Restaurant;
-import ch.quickorder.util.ClusterPointConnection;
-import com.clusterpoint.api.CPSConnection;
 import com.clusterpoint.api.request.CPSSearchRequest;
 import com.clusterpoint.api.response.CPSSearchResponse;
 import org.w3c.dom.Element;
@@ -12,9 +10,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import java.util.*;
 
-public class RestaurantsModel {
-
-    private CPSConnection cpsConnection;
+public class RestaurantsModel extends CpsBasedModel {
 
     private static RestaurantsModel ourInstance = new RestaurantsModel();
 
@@ -23,11 +19,7 @@ public class RestaurantsModel {
     }
 
     private RestaurantsModel() {
-        try {
-            cpsConnection = ClusterPointConnection.getInstance().getConnection( "Restaurants");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        super("Restaurants");
     }
 
     public Collection< Restaurant> getRestaurantsByName( String name) {

@@ -1,10 +1,6 @@
 package ch.quickorder.model;
 
-import ch.quickorder.entities.Product;
 import ch.quickorder.entities.User;
-import ch.quickorder.service.Users;
-import ch.quickorder.util.ClusterPointConnection;
-import com.clusterpoint.api.CPSConnection;
 import com.clusterpoint.api.request.CPSSearchRequest;
 import com.clusterpoint.api.response.CPSSearchResponse;
 import org.w3c.dom.Element;
@@ -13,7 +9,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import java.util.*;
 
-public class UsersModel {
+public class UsersModel extends CpsBasedModel {
 
     private static UsersModel ourInstance = new UsersModel();
 
@@ -21,14 +17,8 @@ public class UsersModel {
         return ourInstance;
     }
 
-    private CPSConnection cpsConnection;
-
     private UsersModel() {
-        try {
-            cpsConnection = ClusterPointConnection.getInstance().getConnection( "Users");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        super("Users");
     }
 
     public Collection<User> getUsers() {
@@ -61,6 +51,7 @@ public class UsersModel {
 
                 JAXBContext context = JAXBContext.newInstance(User.class);
                 Unmarshaller unmarshaller = context.createUnmarshaller();
+                unmarshaller.setEventHandler(new javax.xml.bind.helpers.DefaultValidationEventHandler());
 
                 while (it.hasNext()) {
                     User user = (User) unmarshaller.unmarshal(it.next());
