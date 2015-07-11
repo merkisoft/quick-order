@@ -51,7 +51,7 @@ public class Users {
             }
 
             if (order.getStatus().equals( OrderStatus.Ordered.name())
-                    || order.getStatus().equals( OrderStatus.Paid)) {
+                    || order.getStatus().equals( OrderStatus.Paid.name())) {
                 orderList.add( order);
             }
         }
