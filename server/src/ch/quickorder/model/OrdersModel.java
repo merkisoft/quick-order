@@ -1,10 +1,8 @@
 package ch.quickorder.model;
 
 import ch.quickorder.entities.Order;
-import ch.quickorder.entities.Product;
 import ch.quickorder.util.OrderStatus;
 import com.clusterpoint.api.request.*;
-import com.clusterpoint.api.response.CPSModifyResponse;
 import com.clusterpoint.api.response.CPSSearchResponse;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -13,7 +11,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -34,7 +31,7 @@ public class OrdersModel extends CpsBasedModel {
         super("Orders");
 
         try {
-            JAXBContext context = JAXBContext.newInstance(Product.class);
+            JAXBContext context = JAXBContext.newInstance(Order.class);
             orderMarshaller = context.createMarshaller();
             orderUnmarshaller = context.createUnmarshaller();
         } catch (JAXBException e) {
@@ -72,19 +69,16 @@ public class OrdersModel extends CpsBasedModel {
 
     public Order createOrder(String userId, Order order) {
 
-        // Fill in missing order details
-        order.setId(UUID.randomUUID().toString());
-        order.setTimestamp(System.currentTimeMillis());
-        order.setStatus(OrderStatus.Ordered.name());
-        order.setTicketNumber(ticketNumber.incrementAndGet() % 100);
-
         try {
             // Begin transaction
             CPSBeginTransactionRequest beginTransactionRequest = new CPSBeginTransactionRequest();
             cpsConnection.sendRequest(beginTransactionRequest);
 
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            dbf.setNamespaceAware(true);
+            // Fill in missing order details
+            order.setId(UUID.randomUUID().toString());
+            order.setTimestamp(System.currentTimeMillis());
+            order.setStatus(OrderStatus.Ordered.name());
+            order.setTicketNumber(RestaurantsModel.getInstance().getTicketNumber(order.getRestaurant()));
 
             // Insert order
             {

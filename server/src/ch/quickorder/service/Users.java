@@ -46,6 +46,10 @@ public class Users {
         for( String orderId : user.getOrders()) {
             Order order = OrdersModel.getInstance().getOrderById(orderId);
 
+            if (order == null) {
+                continue;
+            }
+
             if (order.getStatus().equals( OrderStatus.Ordered.name())
                     || order.getStatus().equals( OrderStatus.Paid)) {
                 orderList.add( order);

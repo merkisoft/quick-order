@@ -28,7 +28,7 @@ public class Orders {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public
     @ResponseBody
-    Order createOrder(@PathVariable Order order,
+    Order createOrder(@RequestBody Order order,
                       @RequestHeader("x-qo-userid") String user) {
         return OrdersModel.getInstance().createOrder(user, order);
     }
