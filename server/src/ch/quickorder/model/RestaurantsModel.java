@@ -76,8 +76,8 @@ public class RestaurantsModel extends CpsBasedModel {
             CPSPartialReplaceRequest partialReplaceRequest = new CPSPartialReplaceRequest(doc);
             cpsConnection.sendRequest(partialReplaceRequest);
 
-            // Return the ticker number
-            return restaurant.getOrderCount() % 100;
+            // Return the ticker number (1...100)
+            return restaurant.getOrderCount() % 100 + 1;
         } catch (Exception e) {
             return -1;
         }
