@@ -69,7 +69,6 @@ angular
     $httpProvider.defaults.headers.get = {
       'x-qo-userid': '2'
     };
-
     $httpProvider.defaults.headers.post = {
       'x-qo-userid': '2',
       'Content-Type': 'application/json'
@@ -128,14 +127,15 @@ angular
     return {
       restaurant: restaurant,
       products: products,
-      load: load
+      load: load,
+      tableId: tableId
     };
 
   }])
 
   .factory('order', ['Restangular', function (Restangular) {
     var currentOrder = [];
-    var ticketNumber = "";
+    var ticketNumber = 0;
 
     function getTotal() {
       var total = 0;
@@ -162,14 +162,14 @@ angular
 
     }
 
-    function submit() {
+    function submit(restaurantId, table) {
 
       var items = [];
       angular.forEach(currentOrder, function (val) {
         items.push({productId: val.id, count: val.count});
       });
 
-      var order = {'restaurant': "1", 'table': 11, 'items': items};
+      var order = {"restaurantId": restaurantId, "table": table, "items": items};
 
       Restangular.all('/orders/create').post(order)
         .then(function (data) {
@@ -184,7 +184,7 @@ angular
       addItem: addItem,
       currentOrder: currentOrder,
       getTotal: getTotal,
-      ticketNumber: ticketNumber
+      getTicketNumber: function() { return ticketNumber; }
     };
 
     // return Restangular.service('order');

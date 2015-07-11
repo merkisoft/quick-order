@@ -12,7 +12,7 @@ angular.module('webApp')
 
     $scope.products = restaurant.products;
     $scope.currentOrder = order.currentOrder;
-    $scope.ticketNumber = order.ticketNumber;
+    $scope.getTicketNumber = order.getTicketNumber;
     $scope.restaurant = restaurant.restaurant;
 
     $scope.getTotal = function() {
@@ -30,7 +30,7 @@ angular.module('webApp')
     };
 
     $scope.payOrder = function() {
-      order.submit();
+      order.submit($scope.restaurant.id, $scope.tableId);
       $location.path("/order/paid");
     };
 

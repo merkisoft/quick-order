@@ -12,8 +12,8 @@
 
         <br>Your ticket number is:
 
-        <div style="background-color: darkorange; font-size: 4em">
-          {{ticketNumber}}
+        <div style="background-color: darkorange; font-size: 4em" ng-if="getTicketNumber()>0">
+          {{getTicketNumber()}}
         </div>
 
       </div>

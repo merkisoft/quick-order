@@ -24,9 +24,9 @@
   your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<div class="app">
+<div class="app" ng-swipe-right='Ui.turnOn("uiSidebarLeft")'>
 <!-- Add your site or application content here -->
-<div class="sidebar sidebar-left" style="display:none">
+<div class="sidebar" ng-class="{'uiSidebarLeft':uiSidebarLeft}">
   <div class="scrollable">
     <h1 class="scrollable-header app-name">Order Quick</h1>
 
@@ -50,7 +50,7 @@
 
   </div>
   <div class="btn-group pull-left">
-    <div ui-toggle="uiSidebarLeft" class="btn sidebar-toggle">
+    <div ng-click="uiSidebarLeft=!uiSidebarLeft" class="btn sidebar-toggle">
       <i class="fa fa-bars"></i>
     </div>
   </div>
