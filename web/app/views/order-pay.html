@@ -1,0 +1,31 @@
+<div ui-content-for="title">
+  <span>Submit Order</span>
+</div>
+
+
+<div ui-content-for="bottom">
+  <div class="btn-group justified">
+    <a class="btn" ng-click="payOrder()">Pay and get food!</a>
+  </div>
+</div>
+
+<div class="scrollable">
+  <div class="scrollable-content">
+    <div>
+
+      <div class="row" ng-repeat="i in p.currentOrder">
+        <div class="col-md-8 col-lg-8 col-xs-5 col-sm-8">
+          {{i.name}}
+        </div>
+        <div class="col-md-2 col-lg-2 col-xs-5 col-sm-2">
+          {{i.count}}
+        </div>
+        <div class="col-md-1 col-lg-1 col-xs-1 col-sm-1" style="text-align:right">
+          {{i.price}}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

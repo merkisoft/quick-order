@@ -5,6 +5,9 @@ import java.util.List;
 
 public class ProductGroup {
 
+    private static int counter=0;
+    private int guiId = counter++;
+
     private String name;
     private int position;
     private List<Product> products = new ArrayList<>();
@@ -47,5 +50,9 @@ public class ProductGroup {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public int getGuiId() {
+        return guiId;
     }
 }
