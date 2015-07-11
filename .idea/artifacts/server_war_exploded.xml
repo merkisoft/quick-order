@@ -10,6 +10,10 @@
         <element id="directory" name="lib">
           <element id="library" level="project" name="Spring-4.1.6.RELEASE" />
           <element id="library" level="project" name="Spring MVC-4.1.6.RELEASE" />
+          <element id="file-copy" path="$PROJECT_DIR$/server/lib/cps2-java-api-java-8.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/server/lib/jackson-databind-2.6.0-rc4-20150701.201418-31.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/server/lib/jackson-annotations-2.6.0-rc4-20150625.025006-1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/server/lib/jackson-core-2.6.0-rc4-20150625.025257-1.jar" />
         </element>
       </element>
     </root>
