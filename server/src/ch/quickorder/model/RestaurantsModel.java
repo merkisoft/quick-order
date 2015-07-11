@@ -96,7 +96,7 @@ public class RestaurantsModel extends CpsBasedModel {
             searchRequest = new CPSSearchRequest( query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(searchRequest);
 
-            if ((searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
+            if (( searchResponse == null) || (searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
                 return null;
             }
 

@@ -19,7 +19,7 @@ public class Order {
 
     @XmlElementWrapper(name="items")
     @XmlElement(name = "item", type = OrderItem.class)
-    private Collection< OrderItem> items = new ArrayList<>();
+    private Collection< OrderItem> items;
 
     public String getId() {
         return id;

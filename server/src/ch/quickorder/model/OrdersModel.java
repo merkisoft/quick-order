@@ -3,6 +3,7 @@ package ch.quickorder.model;
 import ch.quickorder.entities.Order;
 import ch.quickorder.entities.User;
 import ch.quickorder.util.OrderStatus;
+import com.clusterpoint.api.CPSConnection;
 import com.clusterpoint.api.request.*;
 import com.clusterpoint.api.response.CPSSearchResponse;
 import org.w3c.dom.Document;
@@ -53,21 +54,8 @@ public class OrdersModel extends CpsBasedModel {
             cpsConnection.sendRequest(beginTransactionRequest);
 
             // Find and update user
-            User user = UsersModel.getInstance().getUserForOrder( id);
-
-            if (user == null || (user.getId().equals( userId) == false)) {
+            if (UsersModel.getInstance().deleteOrderFromUser( id) == false) {
                 return false;
-            }
-
-            Iterator< String> orderIterator = user.getOrders().iterator();
-
-            while (orderIterator.hasNext()) {
-                String orderId = orderIterator.next();
-
-                if (orderId.equals(id)) {
-                    orderIterator.remove();
-                    break;
-                }
             }
 
             // Delete order
@@ -108,7 +96,7 @@ public class OrdersModel extends CpsBasedModel {
         try {
             // Begin transaction
             CPSBeginTransactionRequest beginTransactionRequest = new CPSBeginTransactionRequest();
-//            cpsConnection.sendRequest(beginTransactionRequest);
+            cpsConnection.sendRequest(beginTransactionRequest);
 
             // Fill in missing order details
             order.setId(UUID.randomUUID().toString());
@@ -130,7 +118,7 @@ public class OrdersModel extends CpsBasedModel {
 
             // End transaction
             CPSCommitTransactionRequest commitTransactionRequest = new CPSCommitTransactionRequest();
-//            cpsConnection.sendRequest(commitTransactionRequest);
+            cpsConnection.sendRequest(commitTransactionRequest);
         } catch (Exception e) {
             System.err.println( "Unable to create order: " + e.getMessage());
             return null;
@@ -155,7 +143,7 @@ public class OrdersModel extends CpsBasedModel {
             CPSSearchRequest search_req = new  CPSSearchRequest(query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(search_req);
 
-            if ((searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
+            if (( searchResponse == null) || (searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
                 return null;
             }
 
@@ -175,7 +163,7 @@ public class OrdersModel extends CpsBasedModel {
 
     private Order getFirstOrNull(Collection< Order> orders) {
 
-        if( orders.isEmpty()) {
+        if(( orders == null) || orders.isEmpty()) {
             return null;
         }
 

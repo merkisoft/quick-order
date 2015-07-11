@@ -16,7 +16,7 @@ public class User {
 
     @XmlElementWrapper(name="orders")
     @XmlElement(name = "id", type = String.class)
-    private Collection< String> orders = new ArrayList<>();
+    private Collection< String> orders;
 
     public String getId() {
         return id;

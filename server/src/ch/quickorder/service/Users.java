@@ -2,13 +2,10 @@ package ch.quickorder.service;
 
 import ch.quickorder.entities.Order;
 import ch.quickorder.entities.User;
-import ch.quickorder.model.OrdersModel;
 import ch.quickorder.model.UsersModel;
-import ch.quickorder.util.OrderStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 @Controller
@@ -35,27 +32,6 @@ public class Users {
     @ResponseBody
     Collection<Order> getOpenOrdersForUser(@PathVariable String id,
                                            @RequestHeader("x-qo-userid") String userId) {
-        User user = UsersModel.getInstance().getUserById(id);
-
-        if (user == null) {
-            return null;
-        }
-
-        Collection< Order> orderList = new ArrayList<>();
-
-        for( String orderId : user.getOrders()) {
-            Order order = OrdersModel.getInstance().getOrderById(orderId);
-
-            if (order == null) {
-                continue;
-            }
-
-            if (order.getStatus().equals( OrderStatus.Ordered.name())
-                    || order.getStatus().equals( OrderStatus.Paid.name())) {
-                orderList.add( order);
-            }
-        }
-
-        return orderList;
+        return UsersModel.getInstance().getOpenOrdersForUser(id);
     }
 }

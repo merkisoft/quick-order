@@ -1,7 +1,10 @@
 package ch.quickorder.model;
 
+import ch.quickorder.entities.Order;
 import ch.quickorder.entities.User;
+import ch.quickorder.util.OrderStatus;
 import com.clusterpoint.api.request.CPSPartialReplaceRequest;
+import com.clusterpoint.api.request.CPSReplaceRequest;
 import com.clusterpoint.api.request.CPSSearchRequest;
 import com.clusterpoint.api.response.CPSModifyResponse;
 import com.clusterpoint.api.response.CPSSearchResponse;
@@ -38,7 +41,7 @@ public class UsersModel extends CpsBasedModel {
 
     public Collection<User> getUsers() {
 
-        return getUsersWithQuery( "*");
+        return getUsersWithQuery("*");
     }
 
     public User getUserById( String id) {
@@ -46,11 +49,83 @@ public class UsersModel extends CpsBasedModel {
         return getFirstOrNull(getUsersWithQuery("<id>" + id + "</id>"));
     }
 
-    public User getUserForOrder( String orderId) {
+    public boolean deleteOrderFromUser( String id) {
 
-        String query = "<orders><id>" + orderId + "</id></orders>";
+        String query = "<orders><id>" + id + "</id></orders>";
 
-        return getFirstOrNull(getUsersWithQuery(query));
+        User user = getFirstOrNull(getUsersWithQuery(query));
+
+        if (user == null) {
+            return false;
+        }
+
+        Iterator< String> orderIterator = user.getOrders().iterator();
+
+        while (orderIterator.hasNext()) {
+            String orderId = orderIterator.next();
+
+            if (orderId.equals(id)) {
+                orderIterator.remove();
+                break;
+            }
+        }
+
+        try {
+            Document doc = documentBuilder.newDocument();
+            userMarshaller.marshal(user, doc);
+
+            cpsConnection.sendRequest( new CPSPartialReplaceRequest(doc));
+        } catch (Exception e) {
+            System.err.println( "Unable to delete order from user: " + e);
+            return false;
+        }
+
+        return true;
+    }
+
+    public Collection<Order> getOpenOrdersForUser( String id) {
+
+        User user = UsersModel.getInstance().getUserById(id);
+
+        if (user == null) {
+            return null;
+        }
+
+        Collection< Order> orderList = new ArrayList<>();
+
+        Iterator< String> orderIterator = user.getOrders().iterator();
+
+        boolean userChanged = false;
+
+        while (orderIterator.hasNext()) {
+            String orderId = orderIterator.next();
+
+            Order order = OrdersModel.getInstance().getOrderById(orderId);
+
+            if (order == null) {
+                orderIterator.remove();
+                userChanged = true;
+                continue;
+            }
+
+            if (order.getStatus().equals( OrderStatus.Ordered.name())
+                    || order.getStatus().equals( OrderStatus.Paid.name())) {
+                orderList.add(order);
+            }
+        }
+
+        // Write back user object if it has changed
+        if (userChanged) {
+            try {
+                Document doc = documentBuilder.newDocument();
+                userMarshaller.marshal(user, doc);
+
+                cpsConnection.sendRequest( new CPSReplaceRequest(doc));
+            } catch (Exception e) {
+            }
+        }
+
+        return orderList;
     }
 
     // Must be called within an transaction context!
@@ -91,7 +166,7 @@ public class UsersModel extends CpsBasedModel {
             CPSSearchRequest search_req = new  CPSSearchRequest(query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(search_req);
 
-            if ((searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
+            if (( searchResponse == null) || (searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
                 return null;
             }
 
