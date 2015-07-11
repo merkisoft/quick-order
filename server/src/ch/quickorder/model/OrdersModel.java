@@ -12,12 +12,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class OrdersModel extends CpsBasedModel {
-
-    private AtomicInteger ticketNumber = new AtomicInteger( 1);
-
     private static OrdersModel ourInstance = new OrdersModel();
 
     public static OrdersModel getInstance() {
@@ -46,6 +42,18 @@ public class OrdersModel extends CpsBasedModel {
     public Order getOrderById(String id) {
 
         return getFirstOrNull(getOrdersWithQuery("<id>" + id + "</id>"));
+    }
+
+    public boolean deleteOrderById(String id) {
+
+        try {
+            CPSDeleteRequest deleteRequest = new CPSDeleteRequest(id);
+            cpsConnection.sendRequest(deleteRequest);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 
     public boolean markOrderAsPaid(String user, String id) {
@@ -144,5 +152,4 @@ public class OrdersModel extends CpsBasedModel {
 
         return orders.iterator().next();
     }
-
 }

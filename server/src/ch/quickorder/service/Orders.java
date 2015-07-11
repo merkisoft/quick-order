@@ -25,6 +25,14 @@ public class Orders {
         return OrdersModel.getInstance().getOrderById(id);
     }
 
+    @RequestMapping(value = "/id/{id}", method = RequestMethod.DELETE)
+    public
+    @ResponseBody
+    boolean deleteOrderById(@PathVariable String id,
+                            @RequestHeader("x-qo-userid") String userId) {
+        return OrdersModel.getInstance().deleteOrderById(id);
+    }
+
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public
     @ResponseBody
