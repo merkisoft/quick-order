@@ -2,12 +2,18 @@ package ch.quickorder.model;
 
 import ch.quickorder.entities.Product;
 import ch.quickorder.entities.ProductGroup;
+import com.clusterpoint.api.request.CPSPartialReplaceRequest;
 import com.clusterpoint.api.request.CPSSearchRequest;
+import com.clusterpoint.api.response.CPSModifyResponse;
 import com.clusterpoint.api.response.CPSSearchResponse;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import java.math.BigDecimal;
 import java.util.*;
 
 public class ProductsModel extends CpsBasedModel {
@@ -22,8 +28,18 @@ public class ProductsModel extends CpsBasedModel {
         return instance;
     }
 
+    private Marshaller productMarshaller;
+    private Unmarshaller productUnmarshaller;
+
     public ProductsModel() {
         super("Products");
+
+        try {
+            JAXBContext context = JAXBContext.newInstance(Product.class);
+            productMarshaller = context.createMarshaller();
+            productUnmarshaller = context.createUnmarshaller();
+        } catch (JAXBException e) {
+        }
     }
 
     public Collection<Product> getProducts() {
@@ -37,13 +53,32 @@ public class ProductsModel extends CpsBasedModel {
     }
 
     public Collection<Product> getProductsByName(String name) {
-        return getProductsWithQuery( "<name>" + name + "</name>");
+        return getProductsWithQuery("<name>" + name + "</name>");
     }
 
     public List<Product> getProductsForRestaurant(String restaurant) {
 
         String query = "<restaurant>" + restaurant + "</restaurant>";
         return getProductsWithQuery(query);
+    }
+
+    public boolean updateProductPrice(String id, BigDecimal price) {
+
+        Product product = new Product();
+        product.setId( id);
+        product.setPrice( price);
+
+        try {
+            Document doc = documentBuilder.newDocument();
+            productMarshaller.marshal(product, doc);
+
+            CPSPartialReplaceRequest partialupdateRequest = new CPSPartialReplaceRequest(doc);
+            CPSModifyResponse updateResponse = (CPSModifyResponse) cpsConnection.sendRequest(partialupdateRequest);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 
     private List<Product> getProductsWithQuery(String query) {

@@ -1,12 +1,19 @@
 package ch.quickorder.model;
 
+import ch.quickorder.entities.Product;
 import ch.quickorder.entities.User;
+import com.clusterpoint.api.request.CPSPartialReplaceRequest;
 import com.clusterpoint.api.request.CPSSearchRequest;
+import com.clusterpoint.api.response.CPSModifyResponse;
 import com.clusterpoint.api.response.CPSSearchResponse;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
 import java.util.*;
 
 public class UsersModel extends CpsBasedModel {
@@ -17,8 +24,18 @@ public class UsersModel extends CpsBasedModel {
         return ourInstance;
     }
 
+    private Marshaller userMarshaller;
+    private Unmarshaller userUnmarshaller;
+
     private UsersModel() {
         super("Users");
+
+        try {
+            JAXBContext context = JAXBContext.newInstance(User.class);
+            userMarshaller = context.createMarshaller();
+            userUnmarshaller = context.createUnmarshaller();
+        } catch (JAXBException e) {
+        }
     }
 
     public Collection<User> getUsers() {
@@ -29,6 +46,24 @@ public class UsersModel extends CpsBasedModel {
     public User getUserById( String id) {
 
         return getFirstOrNull(getUsersWithQuery("<id>" + id + "</id>"));
+    }
+
+    public boolean addOrderToUser( String id, String orderId) {
+
+        try {
+            User user = getUserById(id);
+            user.getOrders().add( orderId);
+
+            Document doc = documentBuilder.newDocument();
+            userMarshaller.marshal(user, doc);
+
+            CPSPartialReplaceRequest partialupdateRequest = new CPSPartialReplaceRequest(doc);
+            CPSModifyResponse updateResponse = (CPSModifyResponse) cpsConnection.sendRequest(partialupdateRequest);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 
     private List<User> getUsersWithQuery(String query) {
