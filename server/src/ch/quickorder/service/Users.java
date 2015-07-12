@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @Controller
-@RequestMapping(produces = "application/json", value = "/rest/users")
+@RequestMapping(produces = "application/json", value = "/users")
 public class Users {
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)

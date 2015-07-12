@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 
 @Controller
-@RequestMapping(produces = "application/json", value = "/rest/products")
+@RequestMapping(produces = "application/json", value = "/products")
 public class Products {
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @Controller
-@RequestMapping(produces = "application/json", value = "/rest/restaurants")
+@RequestMapping(produces = "application/json", value = "/restaurants")
 public class Restaurants {
 
     @RequestMapping(value = "/{restaurant}/products/all", method = RequestMethod.GET)

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @Controller
-@RequestMapping(produces = "application/json", value = "/rest/orders")
+@RequestMapping(produces = "application/json", value = "/orders")
 public class Orders {
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public

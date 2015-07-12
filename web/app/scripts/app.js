@@ -94,7 +94,11 @@ angular
       'Content-Type': 'application/json'
     };
 
-    RestangularProvider.setBaseUrl('http://' + document.location.hostname + ':8080/rest');
+    var port = document.location.port;
+    if (document.location.port == 9000) {
+      port = 8080;
+    }
+    RestangularProvider.setBaseUrl('http://' + document.location.hostname + ':'+port+'/rest');
     // RestangularProvider.setExtraFields(['name']);
     RestangularProvider.setResponseExtractor(function (response) {
       /* if (response.error) {
