@@ -75,7 +75,7 @@ public class OrdersModel extends CpsBasedModel {
             CPSCommitTransactionRequest commitTransactionRequest = new CPSCommitTransactionRequest();
             cpsConnection.sendRequest(commitTransactionRequest);
 
-            System.out.println(currentTime() + " Delete order transaction committed");
+            System.out.println(currentTime() + "Delete order transaction committed");
         } catch (Exception e) {
             System.err.println(currentTime() + "Unable to delete order: " + e.getMessage());
             return false;
@@ -139,7 +139,7 @@ public class OrdersModel extends CpsBasedModel {
             CPSCommitTransactionRequest commitTransactionRequest = new CPSCommitTransactionRequest();
             cpsConnection.sendRequest(commitTransactionRequest);
 
-            System.out.println(currentTime() + " Create order transaction committed");
+            System.out.println(currentTime() + "Create order transaction committed");
         } catch (Exception e) {
             System.err.println(currentTime() + "Unable to create order: " + e.getMessage());
             return null;

@@ -20,7 +20,7 @@ abstract public class CpsBasedModel {
     };
 
     protected String currentTime() {
-        return dateFormat.get().format(new Date( System.currentTimeMillis()));
+        return dateFormat.get().format(new Date( System.currentTimeMillis())) + getClass().getSimpleName() + " ";
     }
 
     protected CPSConnection cpsConnection;

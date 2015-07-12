@@ -4,9 +4,7 @@ import ch.quickorder.entities.Product;
 import ch.quickorder.entities.ProductGroup;
 import com.clusterpoint.api.request.CPSPartialReplaceRequest;
 import com.clusterpoint.api.request.CPSSearchRequest;
-import com.clusterpoint.api.response.CPSModifyResponse;
 import com.clusterpoint.api.response.CPSSearchResponse;
-import org.apache.commons.logging.impl.Log4JLogger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -105,6 +103,7 @@ public class ProductsModel extends CpsBasedModel {
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(search_req);
 
             if (( searchResponse == null) || (searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
+                System.err.println( currentTime() + "Unable to query restaurants");
                 return null;
             }
 

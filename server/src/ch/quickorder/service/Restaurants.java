@@ -3,8 +3,10 @@ package ch.quickorder.service;
 import ch.quickorder.entities.Product;
 import ch.quickorder.entities.ProductGroup;
 import ch.quickorder.entities.Restaurant;
+import ch.quickorder.model.OrdersModel;
 import ch.quickorder.model.ProductsModel;
 import ch.quickorder.model.RestaurantsModel;
+import ch.quickorder.util.LogPrefix;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +28,13 @@ public class Restaurants {
     @ResponseBody
     Collection< ProductGroup> getProductGroupsForRestaurant(@RequestParam(value="locale", defaultValue="en") String locale,
                                                             @PathVariable String restaurant) {
-        return ProductsModel.getInstance().getProductGroupsForRestaurant(restaurant);
+        System.out.println(LogPrefix.currentTime("> Restaurants.getProductGroupsForRestaurant: Begin"));
+
+        try {
+            return ProductsModel.getInstance().getProductGroupsForRestaurant(restaurant);
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Restaurants.getProductGroupsForRestaurant: End"));
+        }
     }
 
     @RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
@@ -47,7 +55,12 @@ public class Restaurants {
     public
     @ResponseBody
     Restaurant getRestaurantById(@PathVariable String id) {
-        return RestaurantsModel.getInstance().getRestaurantById( id);
-    }
+        System.out.println(LogPrefix.currentTime("> Restaurants.getRestaurantById: Begin"));
 
+        try {
+            return RestaurantsModel.getInstance().getRestaurantById(id);
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Restaurants.getRestaurantById: End"));
+        }
+    }
 }

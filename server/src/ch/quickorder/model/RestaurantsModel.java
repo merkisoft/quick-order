@@ -99,6 +99,8 @@ public class RestaurantsModel extends CpsBasedModel {
             attributesList.put("latitude", "yes");
             attributesList.put("longitude", "yes");
 
+            System.out.println(currentTime() + "Starting restaurants query");
+
             CPSSearchRequest searchRequest = new CPSSearchRequest( query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(searchRequest);
 
@@ -107,14 +109,18 @@ public class RestaurantsModel extends CpsBasedModel {
                 return null;
             }
 
+            System.out.println( currentTime() + "Restaurants query finished");
+
             Iterator<Element> iterator = searchResponse.getDocuments().iterator();
 
             while (iterator.hasNext()) {
                 Restaurant restaurant = (Restaurant) restaurantUnmarshaller.unmarshal(iterator.next());
                 restaurantList.add( restaurant);
             }
+
+            System.out.println( currentTime() + "Restaurants list created");
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(currentTime() + "Unable query restaurants: " + e);
         }
 
         return restaurantList;

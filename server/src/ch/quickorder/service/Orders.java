@@ -2,6 +2,7 @@ package ch.quickorder.service;
 
 import ch.quickorder.entities.Order;
 import ch.quickorder.model.OrdersModel;
+import ch.quickorder.util.LogPrefix;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,13 @@ public class Orders {
     @ResponseBody
     Order createOrder(@RequestBody Order order,
                       @RequestHeader("x-qo-userid") String user) {
-        return OrdersModel.getInstance().createOrder(user, order);
+        System.out.println(LogPrefix.currentTime( "> Orders.createOrder: Begin"));
+
+        try {
+            return OrdersModel.getInstance().createOrder(user, order);
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Orders.createOrder: End"));
+        }
     }
 
     @RequestMapping(value = "/markAsPaid/{id}", method = RequestMethod.PUT)
@@ -46,8 +53,12 @@ public class Orders {
     @ResponseBody
     boolean markOrderAsPaid(@PathVariable String id,
                           @RequestHeader("x-qo-userid") String user) {
-        return OrdersModel.getInstance().markOrderAsPaid(user, id);
+        System.out.println(LogPrefix.currentTime( "> Orders.markOrderAsPaid: Begin"));
+
+        try {
+            return OrdersModel.getInstance().markOrderAsPaid(user, id);
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Orders.markOrderAsPaid: End"));
+        }
     }
-
-
 }
