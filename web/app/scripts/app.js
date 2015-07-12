@@ -69,7 +69,7 @@ angular
         controllerAs: 'menuCtrl'
       })
       .when('/user/profile', {
-        templateUrl: 'views/paymentMethods.html',
+        templateUrl: 'views/userProfile.html',
         controller: 'UserCtrl',
         controllerAs: 'userCtrl'
       })
@@ -149,16 +149,24 @@ angular
 
   .factory('user', ['Restangular', function (Restangular) {
     var orders = [];
+    var user = {};
 
     function load() {
         Restangular.all('/orders/all').getList()
           .then(function (data) {
               angular.copy(data, orders);
           });
+
+      Restangular.one('/users/id', 2).get()
+        .then(function (d) {
+          angular.copy(d, user);
+        });
+
     }
 
     return {
       orders: orders,
+      user: user,
       load: load
     };
 

@@ -11,7 +11,7 @@ angular.module('webApp')
   .controller('UserCtrl', ['user', '$scope', function (user, $scope) {
     user.load();
     $scope.orders = user.orders;
-    $scope.firstName = user.firstName;
+    $scope.user = user.user;
 
   }])
 ;
