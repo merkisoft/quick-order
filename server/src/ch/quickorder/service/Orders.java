@@ -41,7 +41,7 @@ public class Orders {
         return OrdersModel.getInstance().createOrder(user, order);
     }
 
-    @RequestMapping(value = "/id/{id}/markAsPaid", method = RequestMethod.PUT)
+    @RequestMapping(value = "/markAsPaid/{id}", method = RequestMethod.PUT)
     public
     @ResponseBody
     boolean markOrderAsPaid(@PathVariable String id,

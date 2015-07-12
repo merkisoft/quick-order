@@ -89,6 +89,10 @@ angular
       'x-qo-userid': '2',
       'Content-Type': 'application/json'
     };
+    $httpProvider.defaults.headers.put = {
+      'x-qo-userid': '2',
+      'Content-Type': 'application/json'
+    };
 
     RestangularProvider.setBaseUrl('http://' + document.location.hostname + ':8080/rest');
     // RestangularProvider.setExtraFields(['name']);
@@ -175,6 +179,7 @@ angular
   .factory('order', ['Restangular', function (Restangular) {
     var currentOrder = [];
     var ticketNumber = 0;
+    var createdOrder = {};
 
     function getTotal() {
       var total = 0;
@@ -201,6 +206,30 @@ angular
 
     }
 
+    function verify(restaurantId, table, callback) {
+
+      var items = [];
+      var newCurrentOrder = [];
+      angular.forEach(currentOrder, function (val, i) {
+        if (val.count > 0) {
+          items.push({productId: val.id, count: val.count});
+          newCurrentOrder.push(val);
+        }
+      });
+
+      angular.copy(newCurrentOrder, currentOrder);
+
+      var order = {"restaurant": restaurantId, "table": table, "items": items};
+
+      Restangular.all('/orders/create').post(order)
+        .then(function (data) {
+          ticketNumber = data.ticketNumber;
+          angular.copy(data, createdOrder);
+          callback();
+        });
+
+    }
+
     function submit(restaurantId, table, callback) {
 
       var items = [];
@@ -208,18 +237,15 @@ angular
         items.push({productId: val.id, count: val.count});
       });
 
-      var order = {"restaurant": restaurantId, "table": table, "items": items};
-
-      Restangular.all('/orders/create').post(order)
+      Restangular.one('/orders/markAsPaid', createdOrder.id).put()
         .then(function (data) {
-          ticketNumber = data.ticketNumber;
-          // $location.path("/anmeldung");
           callback();
         });
 
     }
 
     return {
+      verify: verify,
       submit: submit,
       addItem: addItem,
       currentOrder: currentOrder,

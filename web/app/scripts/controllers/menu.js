@@ -28,7 +28,10 @@ angular.module('webApp')
     };
 
     $scope.verifyOrder = function() {
-      $location.path("/order/pay");
+      order.verify($scope.restaurant.id, $scope.tableId, function() {
+        $location.path("/order/pay");
+      });
+
     };
 
     $scope.payOrder = function() {
