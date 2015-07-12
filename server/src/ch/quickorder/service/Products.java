@@ -2,6 +2,7 @@ package ch.quickorder.service;
 
 import ch.quickorder.entities.Product;
 import ch.quickorder.model.ProductsModel;
+import ch.quickorder.util.LogPrefix;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,13 @@ public class Products {
     public
     @ResponseBody
     Collection<Product> getProducts(@RequestHeader("x-qo-userid") String userId) {
-        return ProductsModel.getInstance().getProducts();
+        System.out.println(LogPrefix.currentTime("> Products.getProducts: Begin"));
+
+        try {
+            return ProductsModel.getInstance().getProducts();
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Products.getProducts: End"));
+        }
     }
 
     @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
@@ -24,7 +31,13 @@ public class Products {
     @ResponseBody
     Product getProductById(@PathVariable String id,
                            @RequestHeader("x-qo-userid") String userId) {
-        return ProductsModel.getInstance().getProductById(id);
+        System.out.println(LogPrefix.currentTime("> Products.getProductById: Begin"));
+
+        try {
+            return ProductsModel.getInstance().getProductById(id);
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Products.getProductById: End"));
+        }
     }
 
     @RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
@@ -32,7 +45,13 @@ public class Products {
     @ResponseBody
     Collection<Product> getProductByName(@PathVariable String name,
                                          @RequestHeader("x-qo-userid") String userId) {
-        return ProductsModel.getInstance().getProductsByName(name);
+        System.out.println(LogPrefix.currentTime("> Products.getProductByName: Begin"));
+
+        try {
+            return ProductsModel.getInstance().getProductsByName(name);
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Products.getProductByName: End"));
+        }
     }
 
     @RequestMapping(value = "/id/{id}", method = RequestMethod.PUT)
@@ -41,7 +60,13 @@ public class Products {
     Boolean updateProductPrice(@PathVariable String id,
                                @RequestParam(value="price") BigDecimal price,
                                @RequestHeader("x-qo-userid") String user) {
-        return ProductsModel.getInstance().updateProductPrice(id, price);
+        System.out.println(LogPrefix.currentTime("> Products.updateProductPrice: Begin"));
+
+        try {
+            return ProductsModel.getInstance().updateProductPrice(id, price);
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Products.updateProductPrice: End"));
+        }
     }
 
 }

@@ -15,7 +15,13 @@ public class Orders {
     public
     @ResponseBody
     Collection<Order> getOrders(@RequestHeader("x-qo-userid") String userId) {
-        return OrdersModel.getInstance().getOrders();
+        System.out.println(LogPrefix.currentTime("> Orders.getOrders: Begin"));
+
+        try {
+            return OrdersModel.getInstance().getOrders();
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Orders.getOrders: End"));
+        }
     }
 
     @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
@@ -23,7 +29,13 @@ public class Orders {
     @ResponseBody
     Order getOrderById(@PathVariable String id,
                        @RequestHeader("x-qo-userid") String userId) {
-        return OrdersModel.getInstance().getOrderById(id);
+        System.out.println(LogPrefix.currentTime("> Orders.getOrderById: Begin"));
+
+        try {
+            return OrdersModel.getInstance().getOrderById(id);
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Orders.getOrderById: End"));
+        }
     }
 
     @RequestMapping(value = "/id/{id}", method = RequestMethod.DELETE)

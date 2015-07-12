@@ -18,7 +18,13 @@ public class Users {
     public
     @ResponseBody
     Collection<User> getUsers(@RequestHeader("x-qo-userid") String userId) {
-        return UsersModel.getInstance().getUsers();
+        System.out.println(LogPrefix.currentTime("> Users.getUsers: Begin"));
+
+        try {
+            return UsersModel.getInstance().getUsers();
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Users.getUsers: End"));
+        }
     }
 
     @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
@@ -26,7 +32,13 @@ public class Users {
     @ResponseBody
     User getUserById(@PathVariable String id,
                      @RequestHeader("x-qo-userid") String userId) {
-        return UsersModel.getInstance().getUserById(id);
+        System.out.println(LogPrefix.currentTime("> Users.getUserById: Begin"));
+
+        try {
+            return UsersModel.getInstance().getUserById(id);
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Users.getUserById: End"));
+        }
     }
 
     @RequestMapping(value = "/id/{id}/openOrders", method = RequestMethod.GET)

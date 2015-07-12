@@ -20,7 +20,13 @@ public class Restaurants {
     public
     @ResponseBody
     Collection<Product> getProductsForRestaurant(@PathVariable String restaurant) {
-        return ProductsModel.getInstance().getProductsForRestaurant(restaurant);
+        System.out.println(LogPrefix.currentTime("> Restaurants.getProductsForRestaurant: Begin"));
+
+        try {
+            return ProductsModel.getInstance().getProductsForRestaurant(restaurant);
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Restaurants.getProductsForRestaurant: End"));
+        }
     }
 
     @RequestMapping(value = "/{restaurant}/products/groups", method = RequestMethod.GET)
@@ -41,14 +47,26 @@ public class Restaurants {
     public
     @ResponseBody
     Collection< Restaurant> getRestaurantsByName(@PathVariable String name) {
-        return RestaurantsModel.getInstance().getRestaurantsByName( name);
+        System.out.println(LogPrefix.currentTime("> Restaurants.getRestaurantsByName: Begin"));
+
+        try {
+            return RestaurantsModel.getInstance().getRestaurantsByName(name);
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Restaurants.getRestaurantsByName: End"));
+        }
     }
 
     @RequestMapping(value = "/city/{city}", method = RequestMethod.GET)
     public
     @ResponseBody
     Collection< Restaurant> getRestaurantsByCity(@PathVariable String city) {
-        return RestaurantsModel.getInstance().getRestaurantsByCity( city);
+        System.out.println(LogPrefix.currentTime("> Restaurants.getRestaurantsByCity: Begin"));
+
+        try {
+            return RestaurantsModel.getInstance().getRestaurantsByCity(city);
+        } finally {
+            System.out.println(LogPrefix.currentTime( "< Restaurants.getRestaurantsByCity: End"));
+        }
     }
 
     @RequestMapping(value = "/id/{id}", method = RequestMethod.GET)
