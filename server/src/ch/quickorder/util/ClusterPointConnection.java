@@ -27,7 +27,7 @@ public class ClusterPointConnection {
 
         if (cpsConnection == null) {
             try {
-                cpsConnection = new CPSConnection("tcps://cloud-eu-0.clusterpoint.com:9008", database,
+                cpsConnection = new CPSConnection("tcps://cloud-eu-1.clusterpoint.com:9008", database,
                         "testuser", "Test42", "1302", "document", "//document/id");
             } catch (Exception e) {
                 e.printStackTrace();
