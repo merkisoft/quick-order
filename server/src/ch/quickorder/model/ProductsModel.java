@@ -4,6 +4,7 @@ import ch.quickorder.entities.Product;
 import ch.quickorder.entities.ProductGroup;
 import com.clusterpoint.api.request.CPSPartialReplaceRequest;
 import com.clusterpoint.api.request.CPSSearchRequest;
+import com.clusterpoint.api.response.CPSModifyResponse;
 import com.clusterpoint.api.response.CPSSearchResponse;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -74,9 +75,9 @@ public class ProductsModel extends CpsBasedModel {
             System.out.println(currentTime() + "Updating price of products " + id);
 
             CPSPartialReplaceRequest partialReplaceRequest = new CPSPartialReplaceRequest(doc);
-            cpsConnection.sendRequest(partialReplaceRequest);
+            CPSModifyResponse modifyResponse = (CPSModifyResponse) cpsConnection.sendRequest(partialReplaceRequest);
 
-            System.out.println(currentTime() + "Price updated");
+            System.out.println(currentTime() + "Price updated in " + modifyResponse.getSeconds());
         } catch (Exception e) {
             System.err.println(currentTime() + "Unable to update price of product: " + e.getMessage());
             return false;
@@ -107,7 +108,7 @@ public class ProductsModel extends CpsBasedModel {
                 return null;
             }
 
-            System.out.println( currentTime() + "Products query finished");
+            System.out.println( currentTime() + "Products query finished in " + searchResponse.getSeconds());
 
             Iterator<Element> iterator = searchResponse.getDocuments().iterator();
 

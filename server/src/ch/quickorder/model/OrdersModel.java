@@ -3,6 +3,8 @@ package ch.quickorder.model;
 import ch.quickorder.entities.Order;
 import ch.quickorder.util.OrderStatus;
 import com.clusterpoint.api.request.*;
+import com.clusterpoint.api.response.CPSBeginTransactionResponse;
+import com.clusterpoint.api.response.CPSModifyResponse;
 import com.clusterpoint.api.response.CPSSearchResponse;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -59,7 +61,9 @@ public class OrdersModel extends CpsBasedModel {
 
             // Begin transaction
             CPSBeginTransactionRequest beginTransactionRequest = new CPSBeginTransactionRequest();
-            cpsConnection.sendRequest(beginTransactionRequest);
+            CPSBeginTransactionResponse beginTransactionResponse = (CPSBeginTransactionResponse) cpsConnection.sendRequest(beginTransactionRequest);
+
+            System.err.println( currentTime() + "Transaction started in " + beginTransactionResponse.getSeconds());
 
             // Find and update user
             if (UsersModel.getInstance().deleteOrderFromUser( id) == false) {
@@ -69,7 +73,9 @@ public class OrdersModel extends CpsBasedModel {
 
             // Delete order
             CPSDeleteRequest deleteRequest = new CPSDeleteRequest(id);
-            cpsConnection.sendRequest(deleteRequest);
+            CPSModifyResponse modifyResponse = (CPSModifyResponse) cpsConnection.sendRequest(deleteRequest);
+
+            System.out.println( currentTime() + "Order deleted in " + modifyResponse.getSeconds());
 
             // End transaction
             CPSCommitTransactionRequest commitTransactionRequest = new CPSCommitTransactionRequest();
@@ -97,9 +103,9 @@ public class OrdersModel extends CpsBasedModel {
             System.out.println(currentTime() + "Marking order as paid");
 
             CPSPartialReplaceRequest partialReplaceRequest = new CPSPartialReplaceRequest(doc);
-            cpsConnection.sendRequest( partialReplaceRequest);
+            CPSModifyResponse modifyResponse = (CPSModifyResponse) cpsConnection.sendRequest(partialReplaceRequest);
 
-            System.out.println(currentTime() + " Order marked as paid");
+            System.out.println(currentTime() + " Order marked as paid in " + modifyResponse.getSeconds());
         } catch (Exception e) {
             System.err.println( currentTime() + "Unable mark order as paid");
             return false;
@@ -111,11 +117,13 @@ public class OrdersModel extends CpsBasedModel {
     public Order createOrder(String userId, Order order) {
 
         try {
-            System.out.println( currentTime() + "Starting create order transaction");
+            System.out.println(currentTime() + "Starting create order transaction");
 
             // Begin transaction
             CPSBeginTransactionRequest beginTransactionRequest = new CPSBeginTransactionRequest();
-            cpsConnection.sendRequest(beginTransactionRequest);
+            CPSBeginTransactionResponse beginTransactionResponse = (CPSBeginTransactionResponse) cpsConnection.sendRequest(beginTransactionRequest);
+
+            System.out.println(currentTime() + "Transaction started in " + beginTransactionResponse.getSeconds());
 
             // Fill in missing order details
             order.setId(UUID.randomUUID().toString());
@@ -129,7 +137,9 @@ public class OrdersModel extends CpsBasedModel {
                 orderMarshaller.marshal(order, doc);
 
                 CPSInsertRequest insertRequest = new CPSInsertRequest(doc);
-                cpsConnection.sendRequest(insertRequest);
+                CPSModifyResponse modifyResponse = (CPSModifyResponse) cpsConnection.sendRequest(insertRequest);
+
+                System.out.println(currentTime() + "Order inserted in " + modifyResponse.getSeconds());
             }
 
             // Update user
@@ -171,7 +181,7 @@ public class OrdersModel extends CpsBasedModel {
                 return null;
             }
 
-            System.out.println( currentTime() + "Users query finished");
+            System.out.println( currentTime() + "Users query finished in " + searchResponse.getSeconds());
 
             Iterator<Element> iterator = searchResponse.getDocuments().iterator();
 

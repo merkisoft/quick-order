@@ -3,6 +3,7 @@ package ch.quickorder.model;
 import ch.quickorder.entities.Restaurant;
 import com.clusterpoint.api.request.CPSPartialReplaceRequest;
 import com.clusterpoint.api.request.CPSSearchRequest;
+import com.clusterpoint.api.response.CPSModifyResponse;
 import com.clusterpoint.api.response.CPSSearchResponse;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -63,6 +64,9 @@ public class RestaurantsModel extends CpsBasedModel {
     public int getTicketNumber(String id) {
 
         try {
+            System.out.println(currentTime() + "Getting ticket number");
+            System.out.println(currentTime() + "Search for restaurant " + id);
+
             // Get restaurant
             Restaurant restaurant = getRestaurantById(id);
 
@@ -78,11 +82,14 @@ public class RestaurantsModel extends CpsBasedModel {
             restaurantMarshaller.marshal(restaurant, doc);
 
             CPSPartialReplaceRequest partialReplaceRequest = new CPSPartialReplaceRequest(doc);
-            cpsConnection.sendRequest(partialReplaceRequest);
+            CPSModifyResponse modifyResponse = (CPSModifyResponse) cpsConnection.sendRequest(partialReplaceRequest);
+
+            System.out.println(currentTime() + "Restaurant updated in " + modifyResponse.getSeconds());
 
             // Return the ticker number (1...100)
             return restaurant.getOrderCount() % 100 + 1;
         } catch (Exception e) {
+            System.err.println(currentTime() + "Unable to get ticket: " + e);
             return -1;
         }
     }
@@ -109,7 +116,7 @@ public class RestaurantsModel extends CpsBasedModel {
                 return null;
             }
 
-            System.out.println( currentTime() + "Restaurants query finished");
+            System.out.println( currentTime() + "Restaurants query finished in " + searchResponse.getSeconds());
 
             Iterator<Element> iterator = searchResponse.getDocuments().iterator();
 

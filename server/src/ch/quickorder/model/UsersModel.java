@@ -85,11 +85,15 @@ public class UsersModel extends CpsBasedModel {
 
     public Collection<Order> getOpenOrdersForUser( String id) {
 
+        System.out.println( currentTime() + "Get open orders for user " + id);
+
         User user = UsersModel.getInstance().getUserById(id);
 
         if (user == null) {
             return null;
         }
+
+        System.out.println( currentTime() + "User found");
 
         Collection< Order> orderList = new ArrayList<>();
 
@@ -120,12 +124,14 @@ public class UsersModel extends CpsBasedModel {
                 Document doc = documentBuilder.newDocument();
                 userMarshaller.marshal(user, doc);
 
-                cpsConnection.sendRequest( new CPSReplaceRequest(doc));
+                CPSModifyResponse updateResponse = (CPSModifyResponse) cpsConnection.sendRequest(new CPSReplaceRequest(doc));
+                System.out.println(currentTime() + "User replaced in " + updateResponse.getSeconds());
             } catch (Exception e) {
-                System.err.println( "Unable to update user entry" + e);
+                System.err.println( currentTime() + "Unable to update user entry" + e);
             }
         }
 
+        System.out.println( currentTime() + "Returning list of ordersfor user");
         return orderList;
     }
 
@@ -133,6 +139,8 @@ public class UsersModel extends CpsBasedModel {
     public boolean addOrderToUser( String id, String orderId) {
 
         try {
+            System.out.println( currentTime() + "Adding order to user");
+
             User user = getUserById(id);
 
             if (user == null) {
@@ -146,7 +154,10 @@ public class UsersModel extends CpsBasedModel {
 
             CPSPartialReplaceRequest partialReplaceRequest = new CPSPartialReplaceRequest(doc);
             CPSModifyResponse updateResponse = (CPSModifyResponse) cpsConnection.sendRequest(partialReplaceRequest);
+
+            System.out.println( currentTime() + "Order added to user in " + updateResponse.getSeconds());
         } catch (Exception e) {
+            System.err.println( currentTime() + "Unable to add order to user: " + e);
             return false;
         }
 
@@ -164,7 +175,7 @@ public class UsersModel extends CpsBasedModel {
             attributesList.put("lastName", "yes");
             attributesList.put("orders", "yes");
 
-            System.out.println(currentTime() + "Starting products query");
+            System.out.println(currentTime() + "Starting users query");
 
             CPSSearchRequest search_req = new  CPSSearchRequest(query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(search_req);
@@ -174,7 +185,7 @@ public class UsersModel extends CpsBasedModel {
                 return null;
             }
 
-            System.out.println( currentTime() + "Users query finished");
+            System.out.println( currentTime() + "Users query finished in " + searchResponse.getSeconds());
 
             Iterator<Element> iterator = searchResponse.getDocuments().iterator();
 
@@ -183,7 +194,7 @@ public class UsersModel extends CpsBasedModel {
                 userList.add(user);
             }
         } catch (Exception e) {
-            System.err.println( currentTime() + "Unable to query users: " + e.getMessage());
+            System.err.println(currentTime() + "Unable to query users: " + e.getMessage());
             return null;
         }
 
