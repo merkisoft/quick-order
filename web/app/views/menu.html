@@ -1,5 +1,9 @@
 <div ui-content-for="title">
-  <div>{{restaurant.name}} / Table #{{getTableId()}}</div>
+  <div>
+    <a href="https://www.google.com/maps/?q=@{{restaurant.latitude}},{{restaurant.longitude}}" target="_blank">
+      {{restaurant.name}} / Table #{{getTableId()}}
+    </a>
+  </div>
 </div>
 
 <div ui-content-for="bottom">
