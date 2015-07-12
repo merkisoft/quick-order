@@ -6,6 +6,7 @@ import com.clusterpoint.api.request.CPSPartialReplaceRequest;
 import com.clusterpoint.api.request.CPSSearchRequest;
 import com.clusterpoint.api.response.CPSModifyResponse;
 import com.clusterpoint.api.response.CPSSearchResponse;
+import org.apache.commons.logging.impl.Log4JLogger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -72,9 +73,14 @@ public class ProductsModel extends CpsBasedModel {
             Document doc = documentBuilder.newDocument();
             productMarshaller.marshal(product, doc);
 
+            System.out.println(currentTime() + "Updating price of products " + id);
+
             CPSPartialReplaceRequest partialReplaceRequest = new CPSPartialReplaceRequest(doc);
             cpsConnection.sendRequest(partialReplaceRequest);
+
+            System.out.println(currentTime() + "Price updated");
         } catch (Exception e) {
+            System.err.println(currentTime() + "Unable to update price of product: " + e.getMessage());
             return false;
         }
 
@@ -93,6 +99,8 @@ public class ProductsModel extends CpsBasedModel {
             attributesList.put("restaurant", "yes");
             attributesList.put("price", "yes");
 
+            System.out.println( currentTime() + "Starting products query");
+
             CPSSearchRequest search_req = new  CPSSearchRequest(query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(search_req);
 
@@ -100,14 +108,18 @@ public class ProductsModel extends CpsBasedModel {
                 return null;
             }
 
+            System.out.println( currentTime() + "Products query finished");
+
             Iterator<Element> iterator = searchResponse.getDocuments().iterator();
 
             while (iterator.hasNext()) {
                 Product product = (Product) productUnmarshaller.unmarshal(iterator.next());
                 productList.add( product);
             }
+
+            System.out.println( currentTime() + "Product list created");
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(currentTime() + "Unable to query products: " + e.getMessage());
             return null;
         }
 
@@ -115,6 +127,8 @@ public class ProductsModel extends CpsBasedModel {
     }
 
     public List<ProductGroup> getProductGroupsForRestaurant(String restaurant) {
+
+        System.out.println(currentTime() + "Collecting product groups for " + restaurant);
 
         Map< String, ProductGroup> productGroupMap = new HashMap<>();
 
@@ -134,12 +148,9 @@ public class ProductsModel extends CpsBasedModel {
         }
 
         List< ProductGroup> sortedGroups = new ArrayList<>( productGroupMap.values());
-        sortedGroups.sort(new Comparator<ProductGroup>() {
-            @Override
-            public int compare(ProductGroup o1, ProductGroup o2) {
-                return o1.getPosition() - o2.getPosition();
-            }
-        });
+        sortedGroups.sort((o1, o2) -> o1.getPosition() - o2.getPosition());
+
+        System.out.println(currentTime() + "Found " + sortedGroups.size() + " product groups for " + restaurant);
 
         return sortedGroups;
     }

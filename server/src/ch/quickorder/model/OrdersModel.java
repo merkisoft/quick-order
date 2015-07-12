@@ -1,9 +1,7 @@
 package ch.quickorder.model;
 
 import ch.quickorder.entities.Order;
-import ch.quickorder.entities.User;
 import ch.quickorder.util.OrderStatus;
-import com.clusterpoint.api.CPSConnection;
 import com.clusterpoint.api.request.*;
 import com.clusterpoint.api.response.CPSSearchResponse;
 import org.w3c.dom.Document;
@@ -16,6 +14,7 @@ import javax.xml.bind.Unmarshaller;
 import java.util.*;
 
 public class OrdersModel extends CpsBasedModel {
+
     private static OrdersModel ourInstance = new OrdersModel();
 
     public static OrdersModel getInstance() {
@@ -43,18 +42,28 @@ public class OrdersModel extends CpsBasedModel {
 
     public Order getOrderById(String id) {
 
-        return getFirstOrNull(getOrdersWithQuery("<id>" + id + "</id>"));
+        Collection<Order> orders = getOrdersWithQuery("<id>" + id + "</id>");
+
+        if (orders == null) {
+            System.err.println( currentTime() + "Can't look up order " + id);
+            return null;
+        }
+
+        return getFirstOrNull(orders);
     }
 
     public boolean deleteOrderById(String id, String userId) {
 
         try {
+            System.out.println( currentTime() + "Starting create delete transaction");
+
             // Begin transaction
             CPSBeginTransactionRequest beginTransactionRequest = new CPSBeginTransactionRequest();
             cpsConnection.sendRequest(beginTransactionRequest);
 
             // Find and update user
             if (UsersModel.getInstance().deleteOrderFromUser( id) == false) {
+                System.err.println( currentTime() + "Unable to delete order from user");
                 return false;
             }
 
@@ -65,7 +74,10 @@ public class OrdersModel extends CpsBasedModel {
             // End transaction
             CPSCommitTransactionRequest commitTransactionRequest = new CPSCommitTransactionRequest();
             cpsConnection.sendRequest(commitTransactionRequest);
+
+            System.out.println(currentTime() + " Delete order transaction committed");
         } catch (Exception e) {
+            System.err.println(currentTime() + "Unable to delete order: " + e.getMessage());
             return false;
         }
 
@@ -82,9 +94,14 @@ public class OrdersModel extends CpsBasedModel {
             Document doc = documentBuilder.newDocument();
             orderMarshaller.marshal(order, doc);
 
+            System.out.println(currentTime() + "Marking order as paid");
+
             CPSPartialReplaceRequest partialReplaceRequest = new CPSPartialReplaceRequest(doc);
             cpsConnection.sendRequest( partialReplaceRequest);
+
+            System.out.println(currentTime() + " Order marked as paid");
         } catch (Exception e) {
+            System.err.println( currentTime() + "Unable mark order as paid");
             return false;
         }
 
@@ -94,6 +111,8 @@ public class OrdersModel extends CpsBasedModel {
     public Order createOrder(String userId, Order order) {
 
         try {
+            System.out.println( currentTime() + "Starting create order transaction");
+
             // Begin transaction
             CPSBeginTransactionRequest beginTransactionRequest = new CPSBeginTransactionRequest();
             cpsConnection.sendRequest(beginTransactionRequest);
@@ -119,8 +138,10 @@ public class OrdersModel extends CpsBasedModel {
             // End transaction
             CPSCommitTransactionRequest commitTransactionRequest = new CPSCommitTransactionRequest();
             cpsConnection.sendRequest(commitTransactionRequest);
+
+            System.out.println(currentTime() + " Create order transaction committed");
         } catch (Exception e) {
-            System.err.println( "Unable to create order: " + e.getMessage());
+            System.err.println(currentTime() + "Unable to create order: " + e.getMessage());
             return null;
         }
 
@@ -140,12 +161,17 @@ public class OrdersModel extends CpsBasedModel {
             attributesList.put("timestamp", "yes");
             attributesList.put("ticketNumber", "yes");
 
+            System.out.println(currentTime() + "Starting orders query");
+
             CPSSearchRequest search_req = new  CPSSearchRequest(query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(search_req);
 
             if (( searchResponse == null) || (searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
+                System.err.println( currentTime() + "Unable to query orders");
                 return null;
             }
+
+            System.out.println( currentTime() + "Users query finished");
 
             Iterator<Element> iterator = searchResponse.getDocuments().iterator();
 
@@ -154,7 +180,7 @@ public class OrdersModel extends CpsBasedModel {
                 orderList.add(order);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(currentTime() + "Unable to query orders: " + e.getMessage());
             return null;
         }
 

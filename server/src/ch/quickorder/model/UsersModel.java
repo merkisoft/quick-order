@@ -164,12 +164,17 @@ public class UsersModel extends CpsBasedModel {
             attributesList.put("lastName", "yes");
             attributesList.put("orders", "yes");
 
+            System.out.println(currentTime() + "Starting products query");
+
             CPSSearchRequest search_req = new  CPSSearchRequest(query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(search_req);
 
             if (( searchResponse == null) || (searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
+                System.err.println( currentTime() + "Unable to query users");
                 return null;
             }
+
+            System.out.println( currentTime() + "Users query finished");
 
             Iterator<Element> iterator = searchResponse.getDocuments().iterator();
 
@@ -178,7 +183,7 @@ public class UsersModel extends CpsBasedModel {
                 userList.add(user);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println( currentTime() + "Unable to query users: " + e.getMessage());
             return null;
         }
 

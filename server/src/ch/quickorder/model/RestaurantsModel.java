@@ -1,6 +1,5 @@
 package ch.quickorder.model;
 
-import ch.quickorder.entities.Product;
 import ch.quickorder.entities.Restaurant;
 import com.clusterpoint.api.request.CPSPartialReplaceRequest;
 import com.clusterpoint.api.request.CPSSearchRequest;
@@ -44,7 +43,14 @@ public class RestaurantsModel extends CpsBasedModel {
 
     public Restaurant getRestaurantById( String id) {
 
-        return getFirstOrNull(getRestaurantByQuery("<id>" + id + "</id>"));
+        Collection< Restaurant> restaurants = getRestaurantByQuery("<id>" + id + "</id>");
+
+        if (restaurants == null) {
+            System.err.println( currentTime() + "Can't look up restaurant " + id);
+            return null;
+        }
+
+        return getFirstOrNull(restaurants);
     }
 
     public Collection< Restaurant> getRestaurantsByCity( String city) {
@@ -90,13 +96,14 @@ public class RestaurantsModel extends CpsBasedModel {
             attributesList.put("id", "yes");
             attributesList.put("name", "yes");
             attributesList.put("city", "yes");
+            attributesList.put("latitude", "yes");
+            attributesList.put("longitude", "yes");
 
-            CPSSearchRequest searchRequest = null;
-
-            searchRequest = new CPSSearchRequest( query, 0, 200, attributesList);
+            CPSSearchRequest searchRequest = new CPSSearchRequest( query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(searchRequest);
 
             if (( searchResponse == null) || (searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
+                System.err.println( currentTime() + "Unable to query restaurants");
                 return null;
             }
 
