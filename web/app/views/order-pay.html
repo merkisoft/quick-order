@@ -31,7 +31,21 @@
     <div class="panel">
       <div class="panel-body">
 
-        Total amount for this order is {{getTotal() | number:2}}
+
+        <div>
+          Total amount for this order is {{getTotal() | number:2}}
+        </div>
+
+        <div ng-if="getTip()>0">
+          <div class="radio">
+            <input type="checkbox" ng-model="hasTip">
+            Proposed Tip is {{getTip()|number:2}}
+          </div>
+          <div ng-if="hasTip">
+            <b>The total amount inclusive Tip is {{(getTip() + getTotal())|number:2}}</b>
+          </div>
+        </div>
+
 
         <br>Your default payment method is
         <img width="34" src="../images/paypal.gif"/>

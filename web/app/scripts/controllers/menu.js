@@ -24,12 +24,17 @@ angular.module('webApp')
     $scope.getTotal = function() {
       return order.getTotal();
     };
+    $scope.getTip = function() {
+      return order.getTotal() / 10;
+    };
 
     document.myscope=$scope;
 
     $scope.addItem = function(i) {
       order.addItem(i);
     };
+
+    $scope.hasTip = true;
 
     $scope.verifyOrder = function() {
       order.verify($scope.restaurant.id, $scope.getTableId(), function() {
@@ -46,9 +51,12 @@ angular.module('webApp')
     };
 
   }])
-  .controller('MenuLoadingCtrl', ['$scope', 'restaurant', '$location', '$routeParams', function ($scope, restaurant, $location, $routeParams) {
+  .controller('MenuLoadingCtrl', ['$scope', 'restaurant', 'order', '$location', '$routeParams', function ($scope, restaurant, order, $location, $routeParams) {
     var restaurantId = $routeParams.rid;
     var tableId = $routeParams.tid;
+
+    restaurant.clear();
+    order.clear();
 
     restaurant.load(restaurantId, tableId, function() {
       $location.path('/menu');

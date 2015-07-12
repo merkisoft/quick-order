@@ -128,6 +128,12 @@ angular
     var restaurant = {};
     var tableId = 0;
 
+    function clear() {
+      angular.forEach(products, function (val) {
+        val.size = 0;
+      });
+    }
+
     function load(restaurantId, tid, callback) {
 
       if (!restaurantId) { return; }
@@ -149,6 +155,7 @@ angular
     return {
       restaurant: restaurant,
       products: products,
+      clear: clear,
       load: load,
       getTableId: function() { return tableId; }
     };
@@ -192,6 +199,10 @@ angular
       });
 
       return total;
+    }
+
+    function clear() {
+      angular.copy([], currentOrder);
     }
 
     function addItem(item) {
@@ -243,12 +254,14 @@ angular
 
       Restangular.one('/orders/markAsPaid', createdOrder.id).put()
         .then(function (data) {
+          angular.copy([], currentOrder);
           callback();
         });
 
     }
 
     return {
+      clear: clear,
       verify: verify,
       submit: submit,
       addItem: addItem,
