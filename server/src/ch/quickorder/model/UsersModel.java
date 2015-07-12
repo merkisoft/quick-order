@@ -122,6 +122,7 @@ public class UsersModel extends CpsBasedModel {
 
                 cpsConnection.sendRequest( new CPSReplaceRequest(doc));
             } catch (Exception e) {
+                System.err.println( "Unable to update user entry" + e);
             }
         }
 
