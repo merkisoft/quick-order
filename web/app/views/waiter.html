@@ -1,3 +1,11 @@
+<div ui-content-for="title">
+  <div>
+    <a href="https://www.google.com/maps/?q=@{{restaurant.latitude}},{{restaurant.longitude}}" target="_blank">
+      {{restaurant.name}} / Table #{{getTableId()}}
+    </a>
+  </div>
+</div>
+
 <div class="scrollable">
   <div class="scrollable-content panel-body">
     <div class="panel">

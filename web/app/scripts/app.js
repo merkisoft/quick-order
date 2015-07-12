@@ -65,8 +65,8 @@ angular
       })
       .when('/waiter', {
         templateUrl: 'views/waiter.html',
-        controller: 'UserCtrl',
-        controllerAs: 'userCtrl'
+        controller: 'MenuCtrl',
+        controllerAs: 'MenuCtrl'
       })
       .when('/user/profile', {
         templateUrl: 'views/userProfile.html',
