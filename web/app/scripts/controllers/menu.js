@@ -32,8 +32,10 @@ angular.module('webApp')
     };
 
     $scope.payOrder = function() {
-      order.submit($scope.restaurant.id, $scope.tableId);
-      $location.path("/order/paid");
+      order.submit($scope.restaurant.id, $scope.tableId, function() {
+        $location.path("/order/paid");
+      });
+
     };
 
   }])

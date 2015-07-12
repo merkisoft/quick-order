@@ -1,6 +1,7 @@
 package ch.quickorder.entities;
 
 import javax.xml.bind.annotation.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -75,5 +76,9 @@ public class Order {
 
     public void setItems(Collection<OrderItem> items) {
         this.items = items;
+    }
+
+    public String getDateTime() {
+        return new SimpleDateFormat("MM/dd/yyyy HH:mm").format(new Date(timestamp));
     }
 }

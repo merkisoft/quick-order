@@ -81,3 +81,11 @@ body {
     border-bottom: 0;
   }
 }
+
+.ticketBg {
+  background-image: url(../images/ticket.png);
+  background-size:   contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  text-align: center;
+}

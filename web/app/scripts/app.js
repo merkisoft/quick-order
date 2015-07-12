@@ -53,6 +53,11 @@ angular
         controller: 'MenuCtrl',
         controllerAs: 'menuCtrl'
       })
+      .when('/orders', {
+        templateUrl: 'views/orders.html',
+        controller: 'UserCtrl',
+        controllerAs: 'userCtrl'
+      })
       .when('/order/paid', {
         templateUrl: 'views/order-paid.html',
         controller: 'MenuCtrl',
@@ -117,9 +122,7 @@ angular
           Restangular.all('/restaurants/' + restaurantId + '/products/groups').getList()
             .then(function (data) {
               callback();
-              if (data.length > 0) {
                 angular.copy(data, products);
-              }
             });
         });
 
@@ -130,6 +133,23 @@ angular
       products: products,
       load: load,
       tableId: tableId
+    };
+
+  }])
+
+  .factory('user', ['Restangular', function (Restangular) {
+    var orders = [];
+
+    function load() {
+        Restangular.all('/orders/all').getList()
+          .then(function (data) {
+              angular.copy(data, orders);
+          });
+    }
+
+    return {
+      orders: orders,
+      load: load
     };
 
   }])
@@ -163,19 +183,20 @@ angular
 
     }
 
-    function submit(restaurantId, table) {
+    function submit(restaurantId, table, callback) {
 
       var items = [];
       angular.forEach(currentOrder, function (val) {
         items.push({productId: val.id, count: val.count});
       });
 
-      var order = {"restaurantId": restaurantId, "table": table, "items": items};
+      var order = {"restaurant": restaurantId, "table": table, "items": items};
 
       Restangular.all('/orders/create').post(order)
         .then(function (data) {
           ticketNumber = data.ticketNumber;
           // $location.path("/anmeldung");
+          callback();
         });
 
     }

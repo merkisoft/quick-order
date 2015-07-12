@@ -5,15 +5,18 @@
 <div class="scrollable">
   <div class="scrollable-content panel-body">
     <div class="panel">
-      <div class="panel-body">
+      <div class="panel-body" ng-if="getTicketNumber()>0">
 
         Thank you for your order.
         <br>Your food will be preapred.
 
         <br>Your ticket number is:
 
-        <div style="background-color: darkorange; font-size: 4em" ng-if="getTicketNumber()>0">
-          {{getTicketNumber()}}
+        <div class="ticketBg" ng-if="getTicketNumber()>0">
+          <div style="margin: 0.1em; font-size: 5em">
+            {{getTicketNumber()}}
+          </div>
+
         </div>
 
       </div>
