@@ -5,16 +5,18 @@
 
         <div class="row" ng-repeat="i in orders" style="font-size:1.3em">
 
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-3">
             <div class="ticketBg" style="font-size:1.6em;">
-              <div style="font-size:1.6em;" >
+              <div style="font-size:1.1em;" >
                 {{i.ticketNumber}}
               </div>
             </div>
           </div>
-          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9" style="vertical-align:middle">
             {{i.dateTime}}
+            <br>Items: {{i.items.length}}
           </div>
+          <div> </div>
 
         </div>
       </div>
