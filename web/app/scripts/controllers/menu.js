@@ -10,12 +10,16 @@
 angular.module('webApp')
   .controller('MenuCtrl', ['restaurant', '$scope', '$rootScope', 'order', '$location', function (restaurant, $scope, $rootScope, order, $location) {
 
- //   $rootScope.Ui.turnOn('uiSidebarLeft');
+    if (restaurant.products.length < 1) {
+      $location.path("/");
+      return;
+    }
 
     $scope.products = restaurant.products;
     $scope.currentOrder = order.currentOrder;
     $scope.getTicketNumber = order.getTicketNumber;
     $scope.restaurant = restaurant.restaurant;
+    $scope.getTableId = restaurant.getTableId;
 
     $scope.getTotal = function() {
       return order.getTotal();
@@ -28,14 +32,14 @@ angular.module('webApp')
     };
 
     $scope.verifyOrder = function() {
-      order.verify($scope.restaurant.id, $scope.tableId, function() {
+      order.verify($scope.restaurant.id, $scope.getTableId(), function() {
         $location.path("/order/pay");
       });
 
     };
 
     $scope.payOrder = function() {
-      order.submit($scope.restaurant.id, $scope.tableId, function() {
+      order.submit($scope.restaurant.id, $scope.getTableId(), function() {
         $location.path("/order/paid");
       });
 

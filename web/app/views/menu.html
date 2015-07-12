@@ -1,5 +1,5 @@
 <div ui-content-for="title">
-  <div>{{restaurant.name}}</div>
+  <div>{{restaurant.name}} / Table #{{getTableId()}}</div>
 </div>
 
 <div ui-content-for="bottom">
@@ -25,7 +25,7 @@
                   {{i.name}}
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4" style="text-align:right">
-                  <span ng-if="i.count>0"><span ng-click="i.count=i.count-1; $event.stopPropagation()" class="fa fa-minus" style="margin-left:10px"></span>
+                  <span ng-if="i.count>0"><span ng-click="i.count=i.count-1; $event.stopPropagation()" class="fa fa-minus" style="padding-left:10px"></span>
                     {{i.count}}
                     <span ng-click="i.count=i.count+1; $event.stopPropagation()" class="fa fa-plus"></span></span>
                 </div>

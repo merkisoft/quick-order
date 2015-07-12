@@ -65,8 +65,8 @@ angular
       })
       .when('/waiter', {
         templateUrl: 'views/waiter.html',
-        controller: 'MenuCtrl',
-        controllerAs: 'menuCtrl'
+        controller: 'UserCtrl',
+        controllerAs: 'userCtrl'
       })
       .when('/user/profile', {
         templateUrl: 'views/userProfile.html',
@@ -150,7 +150,7 @@ angular
       restaurant: restaurant,
       products: products,
       load: load,
-      tableId: tableId
+      getTableId: function() { return tableId; }
     };
 
   }])
