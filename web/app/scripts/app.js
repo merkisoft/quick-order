@@ -1,5 +1,7 @@
 'use strict';
 
+var test_on = false;
+
 /**
  * @ngdoc overview
  * @name webApp
@@ -126,6 +128,12 @@ angular
   .factory('restaurant', ['Restangular', function (Restangular) {
     var products = [];
     var restaurant = {};
+
+    if (test_on) {
+      angular.copy(test_products, products);
+      angular.copy(test_restaurant, restaurant);
+    }
+
     var tableId = 0;
 
     function clear() {
