@@ -98,6 +98,18 @@
   
   <!-- Project Libraries -->
   
+  <path id="library.java_ee_6-java_ee_6.classpath">
+    <pathelement location="${basedir}/server/lib/javax.annotation.jar"/>
+    <pathelement location="${basedir}/server/lib/javax.ejb.jar"/>
+    <pathelement location="${basedir}/server/lib/javax.jms.jar"/>
+    <pathelement location="${basedir}/server/lib/javax.persistence.jar"/>
+    <pathelement location="${basedir}/server/lib/javax.resource.jar"/>
+    <pathelement location="${basedir}/server/lib/javax.servlet.jar"/>
+    <pathelement location="${basedir}/server/lib/javax.servlet.jsp.jar"/>
+    <pathelement location="${basedir}/server/lib/javax.servlet.jsp.jstl.jar"/>
+    <pathelement location="${basedir}/server/lib/javax.transaction.jar"/>
+  </path>
+  
   <path id="library.spring-4.1.6.release.classpath">
     <pathelement location="${basedir}/server/lib/aopalliance-1.0.jar"/>
     <pathelement location="${basedir}/server/lib/commons-logging-1.1.3.jar"/>
@@ -150,12 +162,26 @@
   
   <target name="init.artifacts">
     <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.server:war" value="${basedir}/out/artifacts/server_war"/>
     <property name="artifact.output.server:war_exploded" value="${basedir}/out/artifacts/server_war_exploded"/>
     <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="temp.jar.path.server_war.war" value="${artifacts.temp.dir}/server_war.war"/>
   </target>
   
   <target name="clean.artifact.server:war_exploded" description="clean server:war exploded artifact output">
     <delete dir="${artifact.output.server:war_exploded}"/>
+  </target>
+  
+  <target name="artifact.server:war" depends="init.artifacts, artifact.server:war_exploded" description="Build &#39;server:war&#39; artifact">
+    <property name="artifact.temp.output.server:war" value="${artifacts.temp.dir}/server_war"/>
+    <mkdir dir="${artifact.temp.output.server:war}"/>
+    <copy todir="${artifact.output.server:war_exploded}">
+      <fileset dir="${basedir}/web/dist"/>
+    </copy>
+    <zip destfile="${temp.jar.path.server_war.war}">
+      <zipfileset dir="${artifact.output.server:war_exploded}"/>
+    </zip>
+    <copy file="${temp.jar.path.server_war.war}" tofile="${artifact.temp.output.server:war}/server_war.war"/>
   </target>
   
   <target name="artifact.server:war_exploded" depends="init.artifacts, compile.module.server" description="Build &#39;server:war exploded&#39; artifact">
@@ -193,9 +219,17 @@
     <copy file="${basedir}/server/lib/spring-web-4.1.6.RELEASE.jar" tofile="${artifact.output.server:war_exploded}/WEB-INF/lib/spring-web-4.1.6.RELEASE.jar"/>
     <copy file="${basedir}/server/lib/spring-webmvc-4.1.6.RELEASE.jar" tofile="${artifact.output.server:war_exploded}/WEB-INF/lib/spring-webmvc-4.1.6.RELEASE.jar"/>
     <copy file="${basedir}/server/lib/spring-websocket-4.1.6.RELEASE.jar" tofile="${artifact.output.server:war_exploded}/WEB-INF/lib/spring-websocket-4.1.6.RELEASE.jar"/>
+    <copy file="${basedir}/server/lib/cps2-java-api-java-8.jar" tofile="${artifact.output.server:war_exploded}/WEB-INF/lib/cps2-java-api-java-8.jar"/>
+    <copy file="${basedir}/server/lib/jackson-databind-2.6.0-rc4-20150701.201418-31.jar" tofile="${artifact.output.server:war_exploded}/WEB-INF/lib/jackson-databind-2.6.0-rc4-20150701.201418-31.jar"/>
+    <copy file="${basedir}/server/lib/jackson-annotations-2.6.0-rc4-20150625.025006-1.jar" tofile="${artifact.output.server:war_exploded}/WEB-INF/lib/jackson-annotations-2.6.0-rc4-20150625.025006-1.jar"/>
+    <copy file="${basedir}/server/lib/jackson-core-2.6.0-rc4-20150625.025257-1.jar" tofile="${artifact.output.server:war_exploded}/WEB-INF/lib/jackson-core-2.6.0-rc4-20150625.025257-1.jar"/>
   </target>
   
-  <target name="build.all.artifacts" depends="artifact.server:war_exploded" description="Build all artifacts">
+  <target name="build.all.artifacts" depends="artifact.server:war, artifact.server:war_exploded" description="Build all artifacts">
+    <mkdir dir="${artifact.output.server:war}"/>
+    <copy todir="${artifact.output.server:war}">
+      <fileset dir="${artifact.temp.output.server:war}"/>
+    </copy>
     
     <!-- Delete temporary files -->
     <delete dir="${artifacts.temp.dir}"/>

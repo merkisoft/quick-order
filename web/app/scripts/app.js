@@ -210,7 +210,7 @@ angular
 
       var items = [];
       var newCurrentOrder = [];
-      angular.forEach(currentOrder, function (val, i) {
+      angular.forEach(currentOrder, function (val) {
         if (val.count > 0) {
           items.push({productId: val.id, count: val.count});
           newCurrentOrder.push(val);
