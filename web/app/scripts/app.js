@@ -68,6 +68,16 @@ angular
         controller: 'MenuCtrl',
         controllerAs: 'menuCtrl'
       })
+      .when('/user/profile', {
+        templateUrl: 'views/paymentMethods.html',
+        controller: 'UserCtrl',
+        controllerAs: 'userCtrl'
+      })
+      .when('/user/paymentMethods', {
+        templateUrl: 'views/paymentMethods.html',
+        controller: 'UserCtrl',
+        controllerAs: 'userCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

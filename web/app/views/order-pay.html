@@ -25,6 +25,26 @@
         </div>
       </div>
     </div>
+    <div class="panel">
+      <div class="panel-body">
+
+        Total amount for this order is {{getTotal() | number:2}}
+
+        <br>Your default payment method is PayPal. Please confirm below to pay with this payment method.
+
+        <div class="row" ng-repeat="i in filtered = (currentOrder|filter:itemCount(i)) ">
+          <div class="col-lg-8 col-md-8 col-sm-8 col-xs-6">
+            {{i.count}} x {{i.name}}
+          </div>
+          <a class="btn" ng-click="verifyOrder()">Pay just {{getTotal() | number:2}} and order now</a>
+
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6" style="text-align:right">
+            {{i.priceFormatted}}
+          </div>
+
+        </div>
+      </div>
+    </div>
   </div>
 
 </div>
