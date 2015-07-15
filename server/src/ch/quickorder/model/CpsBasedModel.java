@@ -1,6 +1,7 @@
 package ch.quickorder.model;
 
 import ch.quickorder.util.ClusterPointConnection;
+import ch.quickorder.util.ClusterPointConnectionFactory;
 import com.clusterpoint.api.CPSConnection;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -23,13 +24,13 @@ abstract public class CpsBasedModel {
         return dateFormat.get().format(new Date( System.currentTimeMillis())) + getClass().getSimpleName() + " ";
     }
 
-    protected CPSConnection cpsConnection;
+    protected ClusterPointConnection cpsConnection;
 
     protected DocumentBuilder documentBuilder;
 
     protected CpsBasedModel( String database) {
         try {
-            cpsConnection = ClusterPointConnection.getInstance().getConnection( database);
+            cpsConnection = new ClusterPointConnection( database);
         } catch (Exception e) {
             e.printStackTrace();
         }
