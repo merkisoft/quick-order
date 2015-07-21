@@ -181,7 +181,7 @@ public class OrdersModel extends CpsBasedModel {
                 return null;
             }
 
-            System.out.println( currentTime() + "Users query finished in " + searchResponse.getSeconds());
+            System.out.println(currentTime() + "Users query finished in " + searchResponse.getSeconds());
 
             Iterator<Element> iterator = searchResponse.getDocuments().iterator();
 
@@ -205,4 +205,5 @@ public class OrdersModel extends CpsBasedModel {
 
         return orders.iterator().next();
     }
+
 }
