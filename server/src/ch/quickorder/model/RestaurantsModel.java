@@ -136,7 +136,7 @@ public class RestaurantsModel extends CpsBasedModel {
 
     private Restaurant getFirstOrNull(Collection<Restaurant> restaurants) {
 
-        if( restaurants.isEmpty()) {
+        if(( restaurants == null) || restaurants.isEmpty()) {
             return null;
         }
 

@@ -1,6 +1,5 @@
 package ch.quickorder.model;
 
-import ch.quickorder.entities.Product;
 import ch.quickorder.entities.ProductDetails;
 import com.clusterpoint.api.request.CPSSearchRequest;
 import com.clusterpoint.api.response.CPSSearchResponse;
@@ -84,12 +83,12 @@ public class ProductDetailsModel extends CpsBasedModel {
         return productDetailsList;
     }
 
-    private ProductDetails getFirstOrNull(Collection<ProductDetails> products) {
+    private ProductDetails getFirstOrNull(Collection<ProductDetails> productDetails) {
 
-        if( products.isEmpty()) {
+        if(( productDetails == null) || productDetails.isEmpty()) {
             return null;
         }
 
-        return products.iterator().next();
+        return productDetails.iterator().next();
     }
 }

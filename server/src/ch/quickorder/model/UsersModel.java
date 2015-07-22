@@ -204,7 +204,7 @@ public class UsersModel extends CpsBasedModel {
 
     private User getFirstOrNull(Collection< User> users) {
 
-        if( users.isEmpty()) {
+        if(( users == null) || users.isEmpty()) {
             return null;
         }
 

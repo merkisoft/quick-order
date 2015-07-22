@@ -158,7 +158,7 @@ public class ProductsModel extends CpsBasedModel {
 
     private Product getFirstOrNull(Collection<Product> products) {
 
-        if( products.isEmpty()) {
+        if(( products == null) || products.isEmpty()) {
             return null;
         }
 
