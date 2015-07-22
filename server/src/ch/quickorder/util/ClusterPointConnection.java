@@ -9,7 +9,12 @@ import java.io.IOException;
 
 public class ClusterPointConnection {
 
-    private ThreadLocal<CPSConnection> cpsConnection = new ThreadLocal<>();
+    private ThreadLocal<CPSConnection> cpsConnection = new ThreadLocal<CPSConnection>() {
+        @Override
+        protected CPSConnection initialValue() {
+            return ClusterPointConnectionFactory.getInstance().getConnection(database);
+        }
+    };
 
     private String database;
 
@@ -21,18 +26,12 @@ public class ClusterPointConnection {
         return sendRequest0(request, 0);
     }
     private CPSResponse sendRequest0(CPSRequest request, int attempt) throws TransformerFactoryConfigurationError, Exception {
-        CPSConnection cpsConnection = this.cpsConnection.get();
-        if (cpsConnection == null) {
-            cpsConnection = ClusterPointConnectionFactory.getInstance().getConnection(database);
-            this.cpsConnection.set(cpsConnection);
-        }
-
         try {
-            return cpsConnection.sendRequest(request);
+            return cpsConnection.get().sendRequest(request);
         } catch (IOException e) {
             System.out.println(LogPrefix.currentTime(database + " closing db"));
-            cpsConnection.close();
-            this.cpsConnection.set(null);
+            cpsConnection.get().close();
+            cpsConnection.remove();
 
             if (attempt > 5) throw e;
             System.out.println(LogPrefix.currentTime(database + " automatic retry"));

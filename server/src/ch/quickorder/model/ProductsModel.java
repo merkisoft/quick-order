@@ -104,7 +104,7 @@ public class ProductsModel extends CpsBasedModel {
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(search_req);
 
             if (( searchResponse == null) || (searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
-                System.err.println( currentTime() + "Unable to query restaurants");
+                System.err.println( currentTime() + "Unable to query products");
                 return null;
             }
 
