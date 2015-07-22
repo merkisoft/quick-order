@@ -36,17 +36,7 @@ public class Restaurants {
         System.out.println(LogPrefix.currentTime("> Restaurants.getProductGroupsForRestaurant: Begin"));
 
         try {
-            Collection< ProductGroup> list = ProductsModel.getInstance().getProductGroupsForRestaurant(restaurant);
-
-            for( ProductGroup productGroup : list) {
-                for( Product product : productGroup.getProducts()) {
-                    ch.quickorder.entities.ProductDetails productDetails = ProductDetailsModel.getInstance().getDetailsForProduct( product.getId());
-                }
-            }
-
-
-            return list;
-//            return ProductsModel.getInstance().getProductGroupsForRestaurant(restaurant);
+            return ProductsModel.getInstance().getProductGroupsForRestaurant(restaurant);
         } finally {
             System.out.println(LogPrefix.currentTime( "< Restaurants.getProductGroupsForRestaurant: End"));
         }
