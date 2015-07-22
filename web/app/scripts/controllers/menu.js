@@ -43,6 +43,9 @@ angular.module('webApp')
 
     };
 
+    $scope.productDetails = function() {
+    };
+
     $scope.payOrder = function() {
       order.submit($scope.restaurant.id, $scope.getTableId(), function() {
         $location.path("/order/paid");

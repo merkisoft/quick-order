@@ -6,12 +6,6 @@
   </div>
 </div>
 
-<div ui-content-for="bottom">
-  <div class="btn-group justified" ng-if="getTotal()>0">
-    <a class="btn" ng-click="verifyOrder()">Pay just {{getTotal() | number:2}} and order now</a>
-  </div>
-</div>
-
 <div class="scrollable">
   <div class="scrollable-content">
       <div class="panel-group" ui-state='myAccordion' ui-default='1'>
@@ -25,7 +19,7 @@
           <div xui-if="myAccordion == p.guiId">
             <div class="panel-body">
               <div class="row" ng-repeat="i in p.products" ng-click="addItem(i)">
-                <div class="col-lg-8 col-md-8 col-sm-6 col-xs-6 " >
+                <div class="col-lg-7 col-md-7 col-sm-5 col-xs-5 " >
                   {{i.name}}
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4" style="text-align:right">
@@ -35,6 +29,10 @@
                 </div>
                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="text-align:right">
                   {{i.priceFormatted}}
+                </div>
+
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="text-align:right">
+                  <span ng-click="productDetails({{i.id}})" class="fa fa-angle-right"></span>
                 </div>
 
               </div>
@@ -47,3 +45,10 @@
     </div>
   </div>
 </div>
+
+<div ui-content-for="bottom">
+  <div class="btn-group justified" ng-if="getTotal()>0">
+    <a class="btn" ng-click="verifyOrder()">Pay just {{getTotal() | number:2}} and order now</a>
+  </div>
+</div>
+
