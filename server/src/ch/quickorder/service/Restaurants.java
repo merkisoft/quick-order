@@ -1,9 +1,8 @@
 package ch.quickorder.service;
 
-import ch.quickorder.entities.Product;
-import ch.quickorder.entities.ProductGroup;
-import ch.quickorder.entities.Restaurant;
+import ch.quickorder.entities.*;
 import ch.quickorder.model.OrdersModel;
+import ch.quickorder.model.ProductDetailsModel;
 import ch.quickorder.model.ProductsModel;
 import ch.quickorder.model.RestaurantsModel;
 import ch.quickorder.util.LogPrefix;
@@ -37,7 +36,17 @@ public class Restaurants {
         System.out.println(LogPrefix.currentTime("> Restaurants.getProductGroupsForRestaurant: Begin"));
 
         try {
-            return ProductsModel.getInstance().getProductGroupsForRestaurant(restaurant);
+            Collection< ProductGroup> list = ProductsModel.getInstance().getProductGroupsForRestaurant(restaurant);
+
+            for( ProductGroup productGroup : list) {
+                for( Product product : productGroup.getProducts()) {
+                    ch.quickorder.entities.ProductDetails productDetails = ProductDetailsModel.getInstance().getDetailsForProduct( product.getId());
+                }
+            }
+
+
+            return list;
+//            return ProductsModel.getInstance().getProductGroupsForRestaurant(restaurant);
         } finally {
             System.out.println(LogPrefix.currentTime( "< Restaurants.getProductGroupsForRestaurant: End"));
         }

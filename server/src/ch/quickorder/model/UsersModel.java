@@ -36,6 +36,7 @@ public class UsersModel extends CpsBasedModel {
             userMarshaller = context.createMarshaller();
             userUnmarshaller = context.createUnmarshaller();
         } catch (JAXBException e) {
+            System.err.println( currentTime() + "Unable to create marshaller/unmarshaller: " + e.getMessage());
         }
     }
 
@@ -180,7 +181,7 @@ public class UsersModel extends CpsBasedModel {
             CPSSearchRequest search_req = new  CPSSearchRequest(query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(search_req);
 
-            if (( searchResponse == null) || (searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
+            if (( searchResponse == null) || (searchResponse.getHits() == 0)) {
                 System.err.println( currentTime() + "Unable to query users");
                 return null;
             }

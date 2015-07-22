@@ -34,6 +34,7 @@ public class ProductDetailsModel extends CpsBasedModel {
             productDetailsMarshaller = context.createMarshaller();
             productDetailsUnmarshaller = context.createUnmarshaller();
         } catch (JAXBException e) {
+            System.err.println( currentTime() + "Unable to create marshaller/unmarshaller: " + e.getMessage());
         }
     }
 
@@ -60,8 +61,8 @@ public class ProductDetailsModel extends CpsBasedModel {
             CPSSearchRequest search_req = new  CPSSearchRequest(query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(search_req);
 
-            if (( searchResponse == null) || (searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
-                System.err.println( currentTime() + "Unable to query product details");
+            if (( searchResponse == null) || (searchResponse.getHits() == 0)) {
+                System.err.println( currentTime() + "No product details found for (" + query + ")");
                 return null;
             }
 
@@ -76,7 +77,7 @@ public class ProductDetailsModel extends CpsBasedModel {
 
             System.out.println( currentTime() + "Product details list created");
         } catch (Exception e) {
-            System.err.println(currentTime() + "Unable to query product details: " + e.getMessage());
+            System.err.println(currentTime() + "Unable to query product details (" + query + ") " + e);
             return null;
         }
 

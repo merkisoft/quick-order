@@ -33,6 +33,7 @@ public class RestaurantsModel extends CpsBasedModel {
             restaurantMarshaller = context.createMarshaller();
             restaurantUnmarshaller = context.createUnmarshaller();
         } catch (JAXBException e) {
+            System.err.println( currentTime() + "Unable to create marshaller/unmarshaller: " + e.getMessage());
         }
     }
 
@@ -111,7 +112,7 @@ public class RestaurantsModel extends CpsBasedModel {
             CPSSearchRequest searchRequest = new CPSSearchRequest( query, 0, 200, attributesList);
             CPSSearchResponse searchResponse = (CPSSearchResponse) cpsConnection.sendRequest(searchRequest);
 
-            if (( searchResponse == null) || (searchResponse.getDocuments() == null) ||  (searchResponse.getDocuments().isEmpty())) {
+            if (( searchResponse == null) || (searchResponse.getHits() == 0)) {
                 System.err.println( currentTime() + "Unable to query restaurants");
                 return null;
             }

@@ -1,11 +1,10 @@
 package ch.quickorder.entities;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.util.Collection;
 
 @XmlRootElement(name="document")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ProductDetails {
 
     private String id;
@@ -47,6 +46,14 @@ public class ProductDetails {
 
     public void setProduct(String product) {
         this.product = product;
+    }
+
+    public Collection<String> getDescriptions() {
+        return descriptions;
+    }
+
+    public void setDescriptions(Collection<String> descriptions) {
+        this.descriptions = descriptions;
     }
 
     public Collection<String> getIngredients() {
