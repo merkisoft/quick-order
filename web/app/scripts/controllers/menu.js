@@ -8,7 +8,8 @@
  * Controller of the webApp
  */
 angular.module('webApp')
-  .controller('MenuCtrl', ['restaurant', '$scope', '$rootScope', 'order', '$location', function (restaurant, $scope, $rootScope, order, $location) {
+  .controller('MenuCtrl', ['restaurant', '$scope', '$rootScope', 'order', '$location', 'ngDialog',
+    function (restaurant, $scope, $rootScope, order, $location, ngDialog) {
 
     if (restaurant.products.length < 1) {
       $location.path("/");
@@ -43,7 +44,14 @@ angular.module('webApp')
 
     };
 
-    $scope.productDetails = function() {
+    $scope.productDetails = function(item) {
+      $scope.showDetail = true;
+      restaurant.getProductDetails(item.id, function() {
+        ngDialog.open({ template: 'views/product-detail.html', data:
+        {detail: restaurant.product_details, product: item } }).closePromise.then(function(dialog_return) {
+          if (dialog_return.value == 'AddItem') $scope.addItem(item);
+        });
+      });
     };
 
     $scope.payOrder = function() {

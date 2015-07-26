@@ -31,8 +31,8 @@
                   {{i.priceFormatted}}
                 </div>
 
-                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="text-align:right">
-                  <span ng-click="productDetails({{i.id}})" class="fa fa-angle-right"></span>
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="text-align:center" ng-click="productDetails(i); $event.stopPropagation()">
+                  <span class="fa fa-angle-right"></span>
                 </div>
 
               </div>

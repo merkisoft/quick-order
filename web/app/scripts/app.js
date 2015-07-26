@@ -19,7 +19,8 @@ angular
     'ngSanitize',
     'ngTouch',
     'restangular',
-    'mobile-angular-ui'
+    'mobile-angular-ui',
+    'ngDialog'
   ])
 
   .config(function ($routeProvider, RestangularProvider, $httpProvider) {
@@ -128,6 +129,7 @@ angular
   .factory('restaurant', ['Restangular', function (Restangular) {
     var products = [];
     var restaurant = {};
+    var product_details = {};
 
     if (test_on) {
       angular.copy(test_products, products);
@@ -160,11 +162,22 @@ angular
 
     }
 
+    function getProductDetails(id, callback) {
+      angular.copy({}, product_details);
+      Restangular.one('/product/details/id', id).get()
+        .then(function (d) {
+          angular.copy(d, product_details);
+          callback();
+        });
+    }
+
     return {
       restaurant: restaurant,
       products: products,
       clear: clear,
       load: load,
+      product_details: product_details,
+      getProductDetails: getProductDetails,
       getTableId: function() { return tableId; }
     };
 

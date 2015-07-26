@@ -1,7 +1,7 @@
 applications:
 - disk_quota: 1024M
   host: ''
-  name: Quick Order
+  name: quick order
   path: webStarterApp.war
   domain: quick-order.ch
   instances: 1
